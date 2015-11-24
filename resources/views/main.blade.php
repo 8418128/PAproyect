@@ -32,6 +32,6 @@
  <p>Comentario: {{ $image->comment }}</p>
  <hr/>
 @endforeach
-<p>nuevo commit</p>
+<p>nuevo commit2</p>
 <img class="capa" src="{{ asset('canvas/56538d38c89e0.png') }}"/>
 <img class="capa" src="{{ asset('canvas/56538eafaeb75.png') }}"/>
