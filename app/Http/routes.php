@@ -23,6 +23,7 @@ Route::post('uploadCanvas', 'CanvasController@save');
 Route::get('/canvas', function () {
     return view('canvas');
 });
+
 Route::get('/joder', function () {
     return App\User::find(10)->imagesLike("%desfve%");
 });
