@@ -16,17 +16,13 @@ Route::get('/', function () {
 Route::get('regForm', function () {
     return view('regForm');
 });
-
 Route::get('/main', 'MainController@myprofile');
 Route::post('login', 'UsersController@login');
 Route::post('register', 'UsersController@register');
-
 Route::post('uploadCanvas', 'CanvasController@save');
-
 Route::get('/canvas', function () {
     return view('canvas');
 });
-
 Route::get('/joder', function () {
     return App\User::find(10)->imagesLike("%desfve%");
 });
