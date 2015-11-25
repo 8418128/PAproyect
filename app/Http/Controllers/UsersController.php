@@ -44,7 +44,6 @@ class UsersController extends Controller {
 
             $request->session()->put('user_obj', $new_user);
             return redirect('/main');
-
         }
         else{
             return redirect('regForm')
