@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\User;
-
 class UsersController extends Controller {
 
   public function login(Request $request) {
@@ -19,7 +18,7 @@ class UsersController extends Controller {
 
       } 
       else {
-        return redirect('/')
+        return back()
           ->withInput($request->only("user"))
           ->withErrors(['auth' => 'El usuario o contraseña son incorrectos.']);
       }
