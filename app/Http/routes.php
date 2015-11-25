@@ -36,8 +36,8 @@ Route::get('/joder', function () {
     return App\User::find(10)->imagesLike("%desfve%");
 });
 
-/*Route::get('canvas/{filename}', function ($filename)
+/*Route::get('canvasimg/{filename}', function ($filename)
 {
-    $path = public_path("canvas") . '/' . $filename;
+    $path = public_path("canvasimg") . '/' . $filename;
     return Image::make($path)->response();
 });*/

@@ -17,7 +17,7 @@ class CanvasController extends Controller
         $img = $request->input('img64');
         $filteredData=substr($img, strpos($img, ",")+1);
         $unencodedData=base64_decode($filteredData);
-        $f =  public_path("canvas") . "\\" . uniqid() .'.png';
+        $f =  public_path("canvasimg") . "\\" . uniqid() .'.png';
         $fp = fopen($f, 'wb' );
         fwrite( $fp, $unencodedData);
         fclose( $fp );
