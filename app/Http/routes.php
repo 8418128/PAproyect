@@ -18,8 +18,6 @@ Route::get('regForm', function () {
 });
 
 Route::get('/main', 'MainController@myprofile');
-
-
 Route::post('login', 'UsersController@login');
 Route::post('register', 'UsersController@register');
 
