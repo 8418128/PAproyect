@@ -21,7 +21,7 @@ class VerifyLogIn {
      */
     public function handle($request, Closure $next)
     {
-        if($request->path()=='register'||$request->path()=='/') {
+        if($request->path()=='register'||$request->path()=='regForm'||$request->path()=='login'||$request->path()=='/') {
             return $next($request);
         }
         else if($request->session()->get('user_obj')==null){
