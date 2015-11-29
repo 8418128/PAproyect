@@ -10,7 +10,7 @@ class ChEvent implements ShouldBroadcast
 
     /**
      * Create a new event instance.
-     *
+     *c
      * @return void
      */
     public $texto;
