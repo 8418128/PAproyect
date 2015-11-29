@@ -16,6 +16,10 @@ class UsersController extends Controller {
 
     if ( !is_null($user_obj) ) {
         $request->session()->put('user_obj', $user_obj);
+        $prev_path = $request->cookie('prev_path');
+        if(!is_null($prev_path)){
+            return redirect($prev_path);
+        }
         return redirect('/main');
 
       } 

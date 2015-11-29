@@ -27,3 +27,12 @@ Route::get('/canvas', function () {
 Route::get('/joder', function () {
     return App\User::find(10)->imagesLike("%desfve%");
 });
+
+Route::get('/broadcast/{channel}', function($channel) {
+    return view('welcome')->with('channel',$channel);
+});
+
+Route::get('/push/{c}/{m}',function($c,$m){
+    //event(new \App\Events\PruebaEvento($c,$m));
+    event(new \App\Events\ChEvent($c,$m));
+});

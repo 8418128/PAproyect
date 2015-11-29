@@ -8,7 +8,6 @@
 	@endif
 		<br>
 		<input name="pass" type="password" placeholder="Contraseña" />
-		<!--<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />-->
 		<br>
 		<input type="submit" value="Entrar" />
         <a href="regForm">Registrarse</a>

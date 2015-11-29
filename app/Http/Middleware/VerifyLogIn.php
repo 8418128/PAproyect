@@ -25,7 +25,7 @@ class VerifyLogIn {
             return $next($request);
         }
         else if($request->session()->get('user_obj')==null){
-            return redirect('/');
+            return redirect('/')->withCookie(cookie('prev_path', $request->path(), 5));
         }
         else{
             return $next($request);
