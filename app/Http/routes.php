@@ -25,7 +25,10 @@ Route::get('/canvas', function () {
 });
 
 Route::get('/joder', function () {
-    return App\User::find(10)->imagesLike("%desfve%");
+    $json = json_decode(file_get_contents('https://socpa:asdargonnijao@socpa.cloudant.com/users/_design/default/_view/new-view?limit=20&reduce=false'), true);
+    print_r($json);
+
+    return "ok";
 });
 
 Route::get('/broadcast/{channel}', function($channel) {

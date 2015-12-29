@@ -18,7 +18,7 @@
 
 </style>
 
- <p>Bienvenido {{ $user->nick }}</p>
+<p>Bienvenido {{ $user->nick }}</p>
 <h1>Imagenes(todas):</h1>
 @foreach ($user->images as $image)
  <p>Imagen: {{ $image->name }}</p>

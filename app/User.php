@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+//table USERS
 class User extends Model
 {
 
@@ -20,7 +21,6 @@ class User extends Model
 			return true;
 		}
 		return false;
-
 	}
 
     public function images()

@@ -1,5 +1,5 @@
 @extends('master')
-
+@section('jscript'){{asset('generalJs/users.js')}}@endsection
 @section('title', 'Login')
 
 @section('content')
@@ -19,3 +19,4 @@
         <a href="regForm">Registrarse</a>
 </form>
 @endsection
+
