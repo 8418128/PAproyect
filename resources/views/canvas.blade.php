@@ -114,9 +114,8 @@
     #image{
         position:relative;
         z-index: 10000;
-        curso:move;
-        background-image: url('/socialnet/public/canvasimg/Sin%20título.png');
-        left:0px;
+        cursor:move;
+
         width:200px;
         height:200px;
     }
@@ -125,6 +124,7 @@
 @section('jscript'){{asset('generalJs/canvas.js')}}@endsection
 @section('content')
 <div id="page">
+    <!--<div id='image'></div>-->
     <div class="header">
         <a id="new" class="navbtn" onclick="newCanvas()">New</a>
         <a id="save" class="navbtn" onclick="saveCanvas()">Save</a>

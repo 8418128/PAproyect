@@ -2,12 +2,27 @@
  * Created by S on 27/12/2015.
  */
 var ctx, color = "#000";
+var globalsrc = '/socialnet/public/canvasimg/'
+var srcDropped = 'Sin%20título.png';
+var base_image;
+var flag;
+
 $(function(){
+
     newCanvas();
 
-    $("#page").append("<div id='image'></div>")
+    var target = document.getElementById("page");
+    target.addEventListener("dragover", function(e){e.preventDefault();}, true);
+    target.addEventListener("drop", function(e){
+        e.preventDefault();
+        loadImage(e.dataTransfer.files[0]);
+    }, true);
 
-    $('body').on('mousedown', '#image', function() {
+    var imageUrl = globalsrc+srcDropped;
+    //$("#image").css('background-image', 'url(' + imageUrl + ')');
+
+
+    $('#canvas').on('mousedown', '#image', function() {
         $(this).addClass('draggable').parents().on('mousemove', function(e) {
             $('.draggable').offset({
                 top: e.pageY - $('.draggable').outerHeight() / 2,
@@ -19,7 +34,11 @@ $(function(){
         //e.preventDefault();
     }).on('mouseup', function() {
         $('.draggable').removeClass('draggable');
-        console.log($("#image").offset())
+        var offset = $("#image").offset()
+        var plusoff = $(".title").width()
+        console.log(offset.top+"...."+offset.left)
+        setImg(false,imageUrl,(offset.left-1),(offset.top-45))
+        $("#image").css('background-image','')
     });
 
 })
@@ -60,14 +79,6 @@ function newCanvas(){
     drawPointer();
     drawMouse();
 
-
-    var target = document.getElementById("page");
-    target.addEventListener("dragover", function(e){e.preventDefault();}, true);
-    target.addEventListener("drop", function(e){
-        e.preventDefault();
-        loadImage(e.dataTransfer.files[0]);
-    }, true);
-
     $.couch.urlPrefix = "https://socpa.cloudant.com";
     $.couch.login({
         name: "socpa",
@@ -81,25 +92,22 @@ function newCanvas(){
         }
     });
 
-
-
     $.couch.db("media").view("media/media", {
         success: function(data) {
             console.log(data)
             $.each(data.rows,function(i,val){
                 var media = val.value;
                 if(media.type=="stroke"){
-                    var xs=media.x
-                    var ys=media.y
-                    ctx.beginPath();
-                    ctx.strokeStyle = media.color;
-                    for(var i=0;i<xs.length;i++){
-                        ctx.lineTo(xs[i],ys[i]);
-                        ctx.stroke();
+                    console.log("STROKES!!!!")
+                    if(base_image!=null)
+                        setStroke(media)
+                    else{
+                        setStroke(media)
                     }
+
                 }
                 else if(media.type=="img"){
-                    console.log("asdasdasdasd------")
+                    console.log("IMAHENN!!!!")
                     setImg(true,media.src,10,100);
                 }
 
@@ -108,12 +116,24 @@ function newCanvas(){
         error: function(status) {
             console.log(status);
         },
-        key: 5,
+        startkey: 6,
+        endkey: [6,{}],
         reduce: false
     });
 
 
 
+}
+
+function setStroke(media){
+    var xs = media.x
+    var ys = media.y
+    ctx.beginPath();
+    ctx.strokeStyle = media.color;
+    for (var i = 0; i < xs.length; i++) {
+        ctx.lineTo(xs[i], ys[i]);
+        ctx.stroke();
+    }
 }
 
 function selectColor(el){
@@ -200,7 +220,8 @@ var drawMouse = function() {
         if(clicked==1) {
             var db = $.couch.db("media");
             console.log("pintando en "+color)
-            var doc = {"canvas_id": 5, "type": "stroke", "color": color, "x": xs, "y": ys}
+            var date = Math.round(new Date().getTime()/1000)
+            var doc = {"canvas_id": 6,"created_at":date, "type": "stroke", "color": color, "x": xs, "y": ys}
             // insert the doc into the db
             db.saveDoc(doc, {
                 success: function (response, textStatus, jqXHR) {
@@ -224,7 +245,8 @@ var drawMouse = function() {
 
 function setImg(uri,src,x,y)
 {
-    var base_image = new Image();
+    var deferred = $.Deferred();
+    base_image = new Image();
     if(uri)
         base_image.src = "/socialnet/public/canvasimg/"+src
     else {
@@ -232,9 +254,14 @@ function setImg(uri,src,x,y)
     }
     base_image.onload = function(){
         ctx.drawImage(base_image, x, y);
-        if(!uri)
-            base_image.resizable()
+        deferred.resolve();
+        console.log("imagen puesta en :"+x+", "+y)
     }
+    return deferred.promise();
+
+}
+
+function loadMedias(){
 
 }
 
