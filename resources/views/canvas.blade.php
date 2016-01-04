@@ -19,53 +19,15 @@
             -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
 
-        .header, .footer{
+        .footer {
             position: absolute;
             background-color: #222;
             text-align: center;
-        }
-        .header {
-            top: 0px;
-            left: 0px;
-            right: 0px;
-            height: 32px;
-            padding:6px;
-        }
-        .footer {
             bottom: 0px;
             left: 0px;
             right: 0px;
             height: 42px;
             padding:2px;
-        }
-        .title {
-            width: auto;
-            line-height: 32px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #eee;
-            text-shadow: 0px -1px #000;
-            padding:0 60px;
-        }
-        .navbtn {
-            cursor: pointer;
-            float:left;
-            padding: 6px 10px;
-            font-weight: bold;
-            line-height: 18px;
-            font-size: 14px;
-            color: #eee;
-            text-shadow: 0px -1px #000;
-            border: solid 1px #111;
-            border-radius: 4px;
-            background-color: #404040;
-            box-shadow: 0 0 1px 1px #555,inset 0 1px 0 0 #666;
-        }
-        .navbtn-hover, .navbtn:active {
-            color: #222;
-            text-shadow: 0px 1px #aaa;
-            background-color: #aaa;
-            box-shadow: 0 0 1px 1px #444,inset 0 1px 0 0 #ccc;
         }
         #content{
             position: absolute;
@@ -81,7 +43,7 @@
             background-color:#fff;
         }
         .palette-case {
-            width:260px;
+            width:360px;
             margin:auto;
             text-align:center;
         }
@@ -89,7 +51,7 @@
             float:left;
             padding:2px 6px 2px 6px;
         }
-        .palette {
+        .palette,.saveImg {
             border:2px solid #777;
             height:36px;
             width:36px;
@@ -111,28 +73,35 @@
             border:2px dashed #fff;
         }
 
-    #image{
-        position:relative;
-        z-index: 10000;
-        cursor:move;
+        .save{
+            color:white;
+        }
 
-        width:200px;
-        height:200px;
+
+    #image{
+        z-index: 10000;
     }
 
+
     </style>@endsection
-@section('jscript'){{asset('generalJs/canvas.js')}}@endsection
+@section('jscripts')
+    <script type="text/javascript" src="{{asset('generalJs/canvas.js')}}"></script>
+    <script type="text/javascript" src="{{asset('free/js/Matrix.js')}}"></script>
+<script type="text/javascript" src="{{asset('free/js/jquery.freetrans.js')}}"></script>
+    <script src="http://js.pusher.com/3.0/pusher.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{asset('free/css/jquery.freetrans.css')}}"/>
+@endsection
 @section('content')
-<div id="page">
-    <!--<div id='image'></div>-->
-    <div class="header">
-        <a id="new" class="navbtn" onclick="newCanvas()">New</a>
-        <a id="save" class="navbtn" onclick="saveCanvas()">Save</a>
-        <div class="title">Sketch Pad</div>
-    </div>
+    <div id="page">
+        <div id='image' class="draggable-handler"></div>
     <div id="content"><p style="text-align:center">Loading Canvas...</p></div>
+
     <div class="footer">
+
         <div class="palette-case">
+            <div id="save" class="palette-box">
+                <div class="palette save">Save</div>
+            </div>
             <div class="palette-box">
                 <div class="palette white" onclick="selectColor(this)"></div>
             </div>
@@ -148,6 +117,7 @@
             <div class="palette-box">
                 <div class="palette black" onclick="selectColor(this)"></div>
             </div>
+
             <div style="clear:both"></div>
         </div>
     </div>

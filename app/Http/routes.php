@@ -20,22 +20,17 @@ Route::get('/main', 'MainController@myprofile');
 Route::post('login', 'UsersController@login');
 Route::post('register', 'UsersController@register');
 Route::post('uploadCanvas', 'CanvasController@save');
+Route::post('resize', 'CanvasController@resizeImage');
 Route::get('/canvas', function () {
     return view('canvas');
 });
 
-Route::get('/joder', function () {
-    $json = json_decode(file_get_contents('https://socpa:asdargonnijao@socpa.cloudant.com/users/_design/default/_view/new-view?limit=20&reduce=false'), true);
-    print_r($json);
-
-    return "ok";
-});
+Route::get('/joder','CanvasController@r2');
 
 Route::get('/broadcast/{channel}', function($channel) {
     return view('welcome')->with('channel',$channel);
 });
 
-Route::get('/push/{c}/{m}',function($c,$m){
-    //event(new \App\Events\PruebaEvento($c,$m));
-    event(new \App\Events\ChEvent($c,$m));
-});
+Route::post('push', 'CanvasController@push');
+
+Route::get('lastmod', 'CanvasController@lastmod');
