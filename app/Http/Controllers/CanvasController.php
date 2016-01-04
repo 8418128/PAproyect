@@ -7,14 +7,19 @@
  */
 
 namespace App\Http\Controllers;
-
+use Carbon\Carbon;
 use File;
+use App\Painting;
 use Illuminate\Http\Request;
 
 class CanvasController extends Controller
 {
     function lastmod(Request $request){
         $canvas_id = $request->input('canvas_id');
+        $now = Carbon::now();
+        $canvas_update = Painting::find($canvas_id)->update_at;
+        if($now->subMinutes(5) > $canvas_update)
+            return true;
         return false;
     }
 

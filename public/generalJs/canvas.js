@@ -91,6 +91,8 @@ function tryPreview(){
                     error: function (errorThrown) {
                         console.log(errorThrown)
                     }
+                }).done(function(data){
+
                 })
             }
         })
@@ -294,6 +296,49 @@ function loadImage(src){
     reader.readAsDataURL(src);
 }
 
+function removeDoc(id,rev){
+    var doc = {
+        _id: id,
+        _rev: rev
+    };
+    $.couch.db("media").removeDoc(doc, {
+        success: function(data) {
+            console.log(data);
+        },
+        error: function(status) {
+            console.log(status);
+        }
+    });
+}
+
+function deleteMedias(){
+    $.couch.urlPrefix = "https://socpa.cloudant.com";
+    $.couch.login({
+        name: "socpa",
+        password: "asdargonnijao",
+        success: function(data) {
+            console.log(data);
+
+        },
+        error: function(status) {
+            console.log(status);
+        }
+    });
+
+    $.couch.db("media").view("todelete/todelete", {
+        key: canvas_id,
+        reduce: false,
+        success: function(data) {
+            $.each(data.rows,function(i,doc){
+                removeDoc(doc.value._id,doc.value._rev)
+            })
+        },
+        error: function(status) {
+            console.log(status);
+        }
+
+    });
+}
 
 function paintMedias(){
     $.couch.urlPrefix = "https://socpa.cloudant.com";
