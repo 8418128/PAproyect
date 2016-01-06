@@ -9,18 +9,24 @@
 namespace App\Http\Controllers;
 use Carbon\Carbon;
 use File;
-use App\Painting;
+use App\Canvas;
 use Illuminate\Http\Request;
-
 class CanvasController extends Controller
 {
     function lastmod(Request $request){
         $canvas_id = $request->input('canvas_id');
-        $now = Carbon::now();
-        $canvas_update = Painting::find($canvas_id)->update_at;
-        if($now->subMinutes(5) > $canvas_update)
-            return true;
-        return false;
+
+        $canvas_update = Canvas::find(/*$canvas_id*/7)->updated_at;
+        $up = Carbon::createFromFormat('Y-m-d H:i:s', $canvas_update);
+        $now = Carbon::now()->addMinutes(-5)->format('Y-m-d H:i:s');
+
+
+        if($now>$up) {
+            return 1;
+        }
+        return 0;
+
+
     }
 
     function push(Request $request){
@@ -41,6 +47,21 @@ class CanvasController extends Controller
         fclose( $fp );
 
         return $uniq.'.png';
+    }
+
+    function savePreview(Request $request){
+        $canvas_id = $request->input('canvas_id');
+        $img = self::save($request);
+        $canvas = Canvas::find(/*$canvas_id*/7);
+        $previuos_preview = $canvas->preview;
+        /*if(!$previuos_preview->isEmpty()) {
+            $f = public_path("canvasimg") . "\\" . $previuos_preview;
+            File::delete($f);
+        }*/
+        $canvas->preview=$img;
+        $canvas->save();
+        return $img;
+
 
     }
 

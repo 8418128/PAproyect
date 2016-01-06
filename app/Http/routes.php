@@ -34,3 +34,5 @@ Route::get('/broadcast/{channel}', function($channel) {
 Route::post('push', 'CanvasController@push');
 
 Route::get('lastmod', 'CanvasController@lastmod');
+Route::post('uploadPreview', 'CanvasController@savePreview');
+Route::get('uploadPreview', 'CanvasController@savePreview');

@@ -16,4 +16,11 @@ class Canvas extends Model
     {
         return $this->belongsTo(User::class, 'id_destino');
     }
+    /**
+     * @inheritdoc
+     */
+    protected function serializeDate(\DateTime $date)
+    {
+        return $date->getTimestamp();
+    }
 }

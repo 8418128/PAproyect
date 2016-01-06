@@ -51,7 +51,7 @@
             float:left;
             padding:2px 6px 2px 6px;
         }
-        .palette,.saveImg {
+        .palette {
             border:2px solid #777;
             height:36px;
             width:36px;

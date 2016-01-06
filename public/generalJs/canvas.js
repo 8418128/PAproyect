@@ -5,29 +5,23 @@ var ctx, color = "#000";
 var globalsrc = '/socialnet/public/canvasimg/'
 var tempImg,tmpO;
 var tmpW;
-var canvas_id=33;
+var canvas_id=66;
 var invert = false;
-var time = 60000
+var time = 600000
+var timer;
+var offy = 0
+var offx = 0
 $(function(){
 
     newCanvas();
 
     paintMedias()
 
-    setTimeout(function(){
-        var c = $("canvas")
-        var w = c.width()
-        var h = c.height()
-        console.log("COME ON")
-
-    },3000)
-
-
     Pusher.log = function(msg) {
         console.log(msg);
     };
     var pusher = new Pusher("650badadf8611ff0c889")
-    var channel = pusher.subscribe("33");
+    var channel = pusher.subscribe(canvas_id.toString());
     channel.bind('App\\Events\\ChEvent',
         function(data) {
             var media = [{"value":data.texto}]
@@ -53,47 +47,95 @@ $(function(){
         resize_save($("#image"))
     });
 
-    var timer = setInterval(tryPreview, time);
+    //var timer = setInterval(deleteMedias, 6000);
 
-    function resetInterval(){
-        clearInterval(timer);
-        timer = setInterval(tryPreview, time);
-    }
+    //var timer = setInterval(tryPreview, time);
+
+    setTimeout(function(){
+        removeListeners()
+    },6000)
+
+    setTimeout(function(){
+        var o = $("#canvas").freetrans('getOptions');
+        console.log(o)
+        offx = o.x
+        offy = o.y
+        //
+        $("#canvas").freetrans('destroy');
+        /*drawTouch();
+        drawPointer();
+        drawMouse();*/
+    },12000)
+
+
 })
 
-function tryPreview(){
+function resetInterval(){
+    clearInterval(timer);
+    timer = setInterval(tryPreview, time);
+    timer = setInterval(tryPreview, time);
+}
 
+function removeListeners(){
+    var canvas = document.getElementById("canvas");
+    canvas.removeEventListener("mousedown", null);
+    canvas.removeEventListener("mousemove", null);
+    canvas.removeEventListener("MSPointerDown", null);
+    canvas.removeEventListener("MSPointerMove", null);
+    canvas.removeEventListener("touchstart", null);
+    canvas.removeEventListener("touchmove", null);
+
+    $("#canvas").freetrans();
+}
+
+function tryPreview(){
+        console.log("trying update preview")
         $.ajax({
-            type: "get",
+            type: "GET",
             url: "lastmod",
-            canvas_id: canvas_id,
+            data: {
+                canvas_id: canvas_id
+            },
             success: function(data) {
-                console.log("SUCCESS: "+data);
+                console.log("SUCCESS: ----->"+data);
+
+
             },
             error: function(status) {
                 console.log("ERROR: "+status);
             }
         }).done(function(data){
 
-            if(data==true){
+            if(data==1){
+                console.log("UPDATING PREVIEW")
+                var def = deleteMedias()
                 var canvas = document.getElementById("canvas");
                 var img64 = canvas.toDataURL("image/png");
                 $.ajax({
                     type: "POST",
-                    url: "uploadCanvas",
-                    //contentType: "application/x-www-form-urlencoded",
+                    url: "uploadPreview",
                     data: {
-                        img64: img64
+                        img64: img64,
+                        canvas_id: canvas_id
                     },
-                    success: function (response) {
-                        console.log(response);
+                    success: function(data) {
+                        console.log("SUCCESS uploadPreview: "+data);
+
                     },
-                    error: function (errorThrown) {
-                        console.log(errorThrown)
+                    error: function(status) {
+                        console.log("ERROR uploadPreview: "+status);
                     }
-                }).done(function(data){
+
+                }).done(function(img){
+                    def.done(function(){
+                        console.log("GUARDANDO")
+                        var date = Math.round(new Date().getTime()/1000)
+                        var doc = {"canvas_id": canvas_id,"created_at":date, "type": "background","src":img}
+                        saveDoc(doc)
+                    })
 
                 })
+                resetInterval()
             }
         })
 
@@ -139,16 +181,16 @@ function saveImgCanvas(div){
     var date = Math.round(new Date().getTime()/1000)
     var o = div.freetrans('getOptions')
     var angle = o.angle;
-    var x= o.x
-    var y= o.y-44
+    var x= o.x-offx
+    var y= o.y-44-offy
 
-    if(o.scalex!=1||o.scaley!=1){
+    /*if(o.scalex!=1||o.scaley!=1){
         var o = $('#image').freetrans('getBounds')
         var h = (o.height/2)
         var w = (o.width/2)
         x = Math.abs(w-o.center.x)
         y = Math.abs(h-o.center.y)-44
-    }
+    }*/
 
     console.log("X:"+x+", "+"Y:"+y)
 
@@ -198,6 +240,20 @@ function setMedia(rows,i){
 
             }
         }
+        else if(m.type == "background"){
+            var canvas = document.getElementById("canvas");
+            var base_image = new Image();
+            //canvas.save()
+            //canvas.width = window.innerWidth;
+            //canvas.height = window.innerHeight;
+            base_image.onload = function () {
+                ctx.drawImage(base_image, 0, 0, canvas.width, canvas.height);
+                if(i+1<rows.length)
+                    setMedia(rows,i+1)
+
+            };
+            base_image.src = "/socialnet/public/canvasimg/"+m.src;
+        }
 }
 
 
@@ -205,11 +261,19 @@ function setMedia(rows,i){
 function setStroke(media){
     var xs = media.x
     var ys = media.y
+    if(offx!=0||offy!=0) {
+        ctx.save();
+        ctx.translate(-o.x, -o.y)
+    }
     ctx.beginPath();
     ctx.strokeStyle = media.color;
     for (var i = 0; i < xs.length; i++) {
         ctx.lineTo(xs[i], ys[i]);
-        ctx.stroke();
+
+    }
+    ctx.stroke();
+    if(offx!=0||offy!=0) {
+        ctx.restore()
     }
     ctx.strokeStyle = color
 }
@@ -315,29 +379,22 @@ function deleteMedias(){
     $.couch.urlPrefix = "https://socpa.cloudant.com";
     $.couch.login({
         name: "socpa",
-        password: "asdargonnijao",
-        success: function(data) {
-            console.log(data);
-
-        },
-        error: function(status) {
-            console.log(status);
-        }
+        password: "asdargonnijao"
     });
 
-    $.couch.db("media").view("todelete/todelete", {
+    return $.couch.db("media").view("todelete/todelete", {
         key: canvas_id,
         reduce: false,
         success: function(data) {
             $.each(data.rows,function(i,doc){
-                removeDoc(doc.value._id,doc.value._rev)
+                removeDoc(doc.id,doc.value)
             })
         },
         error: function(status) {
             console.log(status);
         }
 
-    });
+    })
 }
 
 function paintMedias(){
@@ -375,7 +432,7 @@ function paintMedias(){
 function newCanvas(){
     //define and resize canvas
     document.getElementById("content").style.height = window.innerHeight-90;
-    var canvas = '<canvas id="canvas" width="'+window.innerWidth+'" height="'+(window.innerHeight-90)+'"></canvas>';
+    var canvas = '<canvas id="canvas" width="3000" height="3000"></canvas>';
     document.getElementById("content").innerHTML = canvas;
 
     // setup canvas
@@ -452,8 +509,8 @@ var drawMouse = function() {
         console.log("START MOUSE")
         clicked = 1;
         ctx.beginPath();
-        x = e.pageX;
-        y = e.pageY-44;
+        x = e.pageX-offx;
+        y = e.pageY-44-offy;
         ctx.moveTo(x,y);
         xs[i]=x;
         ys[i++]=y;
@@ -463,10 +520,11 @@ var drawMouse = function() {
         if(clicked==1){
             x = e.pageX;
             y = e.pageY-44;
-            ctx.lineTo(x,y);
+            ctx.lineTo(x-offx,y-offy);
+            ctx.lineTo(x-offx,y-offy);
             ctx.stroke();
-            xs[i]=x;
-            ys[i++]=y;
+            xs[i]=x-offx;
+            ys[i++]=y-offy;
         }
     };
     var stop = function(e) {
