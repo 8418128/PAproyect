@@ -20,7 +20,6 @@ class CanvasController extends Controller
         $up = Carbon::createFromFormat('Y-m-d H:i:s', $canvas_update);
         $now = Carbon::now()->addMinutes(-5)->format('Y-m-d H:i:s');
 
-
         if($now>$up) {
             return 1;
         }

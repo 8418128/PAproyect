@@ -115,6 +115,12 @@
                 return false;
         };
 
+        function _boundary(x,y){
+                if(x<0){
+                        data
+                }
+        }
+
         // private methods
         function _init(sel, options){
 
@@ -197,10 +203,35 @@
                         var data = sel.data('freetrans');
                         var p = Point(evt.pageX, evt.pageY);
                         var drag = _noSelect(function(evt) {
-                                data.x += evt.pageX - p.x;
-                                data.y += evt.pageY - p.y;
-                                p = Point(evt.pageX, evt.pageY);
-                                _draw(sel, data);
+
+                                        if(data.limit) {
+                                                var cH = $("#content").height()
+                                                var cW = $("#content").width()
+
+                                                var canH = $("#canvas").height()
+                                                var canW = $("#canvas").width()
+
+                                                var wid = (canW - cW)
+                                                var hei = (canH - cH)
+
+                                                console.log(Math.abs(data.x + evt.pageX - p.x) <= wid)
+
+                                                if (data.x + evt.pageX - p.x <= 0 && Math.abs(data.x + evt.pageX - p.x) <= wid) {
+                                                        data.x += evt.pageX - p.x;
+                                                }
+                                                if (data.y + evt.pageY - p.y <= 0 && Math.abs(data.y + evt.pageY - p.y) <= hei) {
+                                                        data.y += evt.pageY - p.y;
+                                                }
+                                                console.log("DATA ->" + Math.abs(data.x) + " , " + Math.abs(data.y))
+                                        }
+                                        else{
+                                                data.x += evt.pageX - p.x;
+                                                data.y += evt.pageY - p.y;
+                                        }
+
+                                        p = Point(evt.pageX, evt.pageY);
+                                        _draw(sel, data);
+
                         });
 
                         var up = function(evt) {
@@ -617,6 +648,11 @@
                     if(opts.hasOwnProperty('angle') && !isNaN(opts.angle)) data._p.rad = data.angle*rad;
                     if(opts.hasOwnProperty('scalex') && !isNaN(opts.scalex)) data._p.cwid = data._p.wid * opts.scalex;
                     if(opts.hasOwnProperty('scaley') && !isNaN(opts.scaley)) data._p.chgt = data._p.hgt * opts.scaley;
+                        if(opts.hasOwnProperty('limit'))
+                                data.limit = opts.limit
+                        else{
+                                data.limit = false;
+                        }
                 }
         }
 

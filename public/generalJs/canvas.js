@@ -5,16 +5,17 @@ var ctx, color = "#000";
 var globalsrc = '/socialnet/public/canvasimg/'
 var tempImg,tmpO;
 var tmpW;
-var canvas_id=66;
+var canvas_id=222;
 var invert = false;
 var time = 600000
 var timer;
 var offy = 0
 var offx = 0
+var moving = false;
 $(function(){
-
+    document.oncontextmenu = function() {return false;};
     newCanvas();
-
+    addListeners()
     paintMedias()
 
     Pusher.log = function(msg) {
@@ -51,29 +52,62 @@ $(function(){
 
     //var timer = setInterval(tryPreview, time);
 
-    setTimeout(function(){
-        removeListeners()
-    },6000)
-
-    setTimeout(function(){
-        var o = $("#canvas").freetrans('getOptions');
-        console.log(o)
-        offx = o.x
-        offy = o.y
-        //
-        $("#canvas").freetrans('destroy');
-        /*drawTouch();
-        drawPointer();
-        drawMouse();*/
-    },12000)
-
 
 })
+
+function toggleMove(){
+    if(moving)
+    moving=false;
+    else
+    moving=true
+}
 
 function resetInterval(){
     clearInterval(timer);
     timer = setInterval(tryPreview, time);
     timer = setInterval(tryPreview, time);
+}
+
+function specialMoveBounds(){
+    $(document).mousedown(function(e){
+      if (moving){
+
+
+      }
+    })
+}
+
+function leftListener(){
+
+    $(document).mousedown(function(e){
+        if( e.button == 2) {
+            if(!moving){
+                removeListeners()
+                $("#canvas").freetrans({
+                    limit:true
+                })
+            }
+            else{
+                var o = $("#canvas").freetrans('getOptions');
+                console.log(o)
+                offx = o.x
+                offy = o.y
+                $("#canvas").freetrans('destroy');
+                addListeners()
+            }
+            toggleMove()
+            return false;
+        }
+        return true;
+    });
+}
+
+
+
+function addListeners(){
+    drawTouch();
+    drawPointer();
+    drawMouse();
 }
 
 function removeListeners(){
@@ -84,8 +118,6 @@ function removeListeners(){
     canvas.removeEventListener("MSPointerMove", null);
     canvas.removeEventListener("touchstart", null);
     canvas.removeEventListener("touchmove", null);
-
-    $("#canvas").freetrans();
 }
 
 function tryPreview(){
@@ -182,15 +214,14 @@ function saveImgCanvas(div){
     var o = div.freetrans('getOptions')
     var angle = o.angle;
     var x= o.x-offx
-    var y= o.y-44-offy
+    var y= o.y-offy
 
-    /*if(o.scalex!=1||o.scaley!=1){
-        var o = $('#image').freetrans('getBounds')
+    if(o.scalex!=1||o.scaley!=1){var o = $('#image').freetrans('getBounds')
         var h = (o.height/2)
         var w = (o.width/2)
         x = Math.abs(w-o.center.x)
-        y = Math.abs(h-o.center.y)-44
-    }*/
+        y = Math.abs(h-o.center.y)
+    }
 
     console.log("X:"+x+", "+"Y:"+y)
 
@@ -243,9 +274,6 @@ function setMedia(rows,i){
         else if(m.type == "background"){
             var canvas = document.getElementById("canvas");
             var base_image = new Image();
-            //canvas.save()
-            //canvas.width = window.innerWidth;
-            //canvas.height = window.innerHeight;
             base_image.onload = function () {
                 ctx.drawImage(base_image, 0, 0, canvas.width, canvas.height);
                 if(i+1<rows.length)
@@ -262,6 +290,7 @@ function setStroke(media){
     var xs = media.x
     var ys = media.y
     if(offx!=0||offy!=0) {
+        var o = $("#canvas").freetrans('getOptions')
         ctx.save();
         ctx.translate(-o.x, -o.y)
     }
@@ -281,7 +310,7 @@ function setStroke(media){
 function setImg(image,x,y,angle)
 {
     var TO_RADIANS = Math.PI/180;
-    ctx.setTransform(1, 0, 0, 1, 0, 0)
+    //ctx.setTransform(1, 0, 0, 1, 0, 0)
     ctx.translate(x+(image.width / 2), y+(image.height / 2));
     ctx.rotate(TO_RADIANS*angle);
     ctx.drawImage(image, -(image.width / 2), -(image.height / 2));
@@ -441,9 +470,8 @@ function newCanvas(){
     ctx.lineWidth = 5;
 
     // setup to trigger drawing on mouse or touch
-    drawTouch();
-    drawPointer();
-    drawMouse();
+    addListeners()
+    leftListener()
 }
 
 //***PAINT METHODS***/
@@ -465,13 +493,13 @@ var drawTouch = function() {
     var start = function(e) {
         ctx.beginPath();
         x = e.changedTouches[0].pageX;
-        y = e.changedTouches[0].pageY-44;
+        y = e.changedTouches[0].pageY;
         ctx.moveTo(x,y);
     };
     var move = function(e) {
         e.preventDefault();
         x = e.changedTouches[0].pageX;
-        y = e.changedTouches[0].pageY-44;
+        y = e.changedTouches[0].pageY;
         ctx.lineTo(x,y);
         ctx.stroke();
     };
@@ -485,14 +513,14 @@ var drawPointer = function() {
         e = e.originalEvent;
         ctx.beginPath();
         x = e.pageX;
-        y = e.pageY-44;
+        y = e.pageY;
         ctx.moveTo(x,y);
     };
     var move = function(e) {
         e.preventDefault();
         e = e.originalEvent;
         x = e.pageX;
-        y = e.pageY-44;
+        y = e.pageY;
         ctx.lineTo(x,y);
         ctx.stroke();
     };
@@ -506,20 +534,22 @@ var drawMouse = function() {
     var i = 0;
     var clicked = 0;
     var start = function(e) {
-        console.log("START MOUSE")
-        clicked = 1;
-        ctx.beginPath();
-        x = e.pageX-offx;
-        y = e.pageY-44-offy;
-        ctx.moveTo(x,y);
-        xs[i]=x;
-        ys[i++]=y;
+        if(e.which != 3) {
+            console.log("START MOUSE")
+            clicked = 1;
+            ctx.beginPath();
+            x = e.pageX - offx;
+            y = e.pageY - offy;
+            ctx.moveTo(x, y);
+            xs[i] = x;
+            ys[i++] = y;
+        }
     };
     var move = function(e) {
         console.log("MOVIENDO MOUSE")
-        if(clicked==1){
+        if(clicked==1&&e.which != 3){
             x = e.pageX;
-            y = e.pageY-44;
+            y = e.pageY;
             ctx.lineTo(x-offx,y-offy);
             ctx.lineTo(x-offx,y-offy);
             ctx.stroke();
@@ -530,7 +560,7 @@ var drawMouse = function() {
     var stop = function(e) {
         console.log("STOP MOUSE")
         i=0;
-        if(clicked==1) {
+        if(clicked==1&&e.which != 3) {
             var date = Math.round(new Date().getTime()/1000)
             var doc = {"canvas_id": canvas_id,"created_at":date, "type": "stroke", "color": color, "x": xs, "y": ys}
             saveDoc(doc);
