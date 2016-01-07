@@ -214,15 +214,12 @@
                                                 var wid = (canW - cW)
                                                 var hei = (canH - cH)
 
-                                                console.log(Math.abs(data.x + evt.pageX - p.x) <= wid)
-
                                                 if (data.x + evt.pageX - p.x <= 0 && Math.abs(data.x + evt.pageX - p.x) <= wid) {
                                                         data.x += evt.pageX - p.x;
                                                 }
                                                 if (data.y + evt.pageY - p.y <= 0 && Math.abs(data.y + evt.pageY - p.y) <= hei) {
                                                         data.y += evt.pageY - p.y;
                                                 }
-                                                console.log("DATA ->" + Math.abs(data.x) + " , " + Math.abs(data.y))
                                         }
                                         else{
                                                 data.x += evt.pageX - p.x;

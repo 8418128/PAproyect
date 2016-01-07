@@ -5,9 +5,9 @@ var ctx, color = "#000";
 var globalsrc = '/socialnet/public/canvasimg/'
 var tempImg,tmpO;
 var tmpW;
-var canvas_id=222;
+var canvas_id=999;
 var invert = false;
-var time = 600000
+var time = 10000
 var timer;
 var offy = 0
 var offx = 0
@@ -50,7 +50,7 @@ $(function(){
 
     //var timer = setInterval(deleteMedias, 6000);
 
-    //var timer = setInterval(tryPreview, time);
+    var timer = setInterval(tryPreview, time);
 
 
 })
@@ -185,7 +185,6 @@ function resize(width,height){
             src: tmpO
         },
         success: function(data) {
-            //console.log("SUCCESS: "+data);
             tmpO = data
 
         },
@@ -216,7 +215,8 @@ function saveImgCanvas(div){
     var x= o.x-offx
     var y= o.y-offy
 
-    if(o.scalex!=1||o.scaley!=1){var o = $('#image').freetrans('getBounds')
+    if(o.scalex!=1||o.scaley!=1){
+        var o = $('#image').freetrans('getBounds')
         var h = (o.height/2)
         var w = (o.width/2)
         x = Math.abs(w-o.center.x)
@@ -289,11 +289,6 @@ function setMedia(rows,i){
 function setStroke(media){
     var xs = media.x
     var ys = media.y
-    if(offx!=0||offy!=0) {
-        var o = $("#canvas").freetrans('getOptions')
-        ctx.save();
-        ctx.translate(-o.x, -o.y)
-    }
     ctx.beginPath();
     ctx.strokeStyle = media.color;
     for (var i = 0; i < xs.length; i++) {
@@ -301,9 +296,6 @@ function setStroke(media){
 
     }
     ctx.stroke();
-    if(offx!=0||offy!=0) {
-        ctx.restore()
-    }
     ctx.strokeStyle = color
 }
 
@@ -405,6 +397,7 @@ function removeDoc(id,rev){
 }
 
 function deleteMedias(){
+    console.log("BORRANDO")
     $.couch.urlPrefix = "https://socpa.cloudant.com";
     $.couch.login({
         name: "socpa",
@@ -534,7 +527,6 @@ var drawMouse = function() {
     var i = 0;
     var clicked = 0;
     var start = function(e) {
-        if(e.which != 3) {
             console.log("START MOUSE")
             clicked = 1;
             ctx.beginPath();
@@ -543,14 +535,12 @@ var drawMouse = function() {
             ctx.moveTo(x, y);
             xs[i] = x;
             ys[i++] = y;
-        }
     };
     var move = function(e) {
         console.log("MOVIENDO MOUSE")
         if(clicked==1&&e.which != 3){
             x = e.pageX;
             y = e.pageY;
-            ctx.lineTo(x-offx,y-offy);
             ctx.lineTo(x-offx,y-offy);
             ctx.stroke();
             xs[i]=x-offx;
@@ -561,20 +551,30 @@ var drawMouse = function() {
         console.log("STOP MOUSE")
         i=0;
         if(clicked==1&&e.which != 3) {
-            var date = Math.round(new Date().getTime()/1000)
-            var doc = {"canvas_id": canvas_id,"created_at":date, "type": "stroke", "color": color, "x": xs, "y": ys}
-            saveDoc(doc);
+            if(!moving) {
+                var date = Math.round(new Date().getTime() / 1000)
+                var doc = {
+                    "canvas_id": canvas_id,
+                    "created_at": date,
+                    "type": "stroke",
+                    "color": color,
+                    "x": xs,
+                    "y": ys
+                }
+                saveDoc(doc);
+                $.ajax({
+                    type: "POST",
+                    url: "push",
+                    data: {
+                        doc: doc
+                    }
+                })
+            }
             xs = [];
             ys = [];
             clicked = 0;
 
-            $.ajax({
-                type: "POST",
-                url: "push",
-                data: {
-                    doc: doc
-                }
-            })
+
 
         }
 
