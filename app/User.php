@@ -7,29 +7,48 @@ use Illuminate\Support\Facades\Hash;
 //table USERS
 class User extends Model
 {
+	protected $primaryKey = 'idUser';
 
-	static public function findByUserPass($user,$pass){
-		$u = User::where('nick', $user)->first();
-		if(!is_null($u)&&Hash::check($pass, $u->password)) {
+	static public function findByUserPass($email,$password){ //OBTENER EL USUARIO MEDIANTE MAIL Y PASS
+		$u = User::where('email','like', $email)->first();
+		if(!is_null($u)&&Hash::check($password, $u->password)) {
+			return $u;
+		}
+		return null;
+	}
+
+	static public function findByUserEmail($email){ //OBTENER USUARIO MEDIANTE EMAIL
+		$u = User::where('email','like', $email)->first();
+		if(!is_null($u)) {
 			return $u;
 		}
 		return null;
 	}
 
 	static public function alreadyIn($user){
-		if(!is_null(User::where('nick', $user)->first())){
+		if(!is_null(User::where('email','like', $user)->first())){
 			return true;
 		}
 		return false;
 	}
 
-    public function images()
-    {
-        return $this->hasMany('App\Image');
-    }
+	public function gallery(){
+		return $this->hasMany('App\Painting');
+	}
+	public function atelier(){
+		return $this->hasMany('App\Canvas');
+	}
+	public function friends(){
+		return $this->hasMany('App\Friend');
+	}
+	public function likesPaintings(){
+		return $this->hasMany('App\Like_painting');
+	}
 
-	public function imagesLike($c)
+
+
+	/*public function imagesLike($c)
 	{
 		return $this->hasMany('App\Image')->where('comment','LIKE','%'.$c.'%')->get();
-	}
+	}*/
 }

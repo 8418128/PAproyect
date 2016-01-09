@@ -11,9 +11,9 @@
     <br>
 
 	@endif
-		<input name="user" type="text" placeholder="Usuario" value="{{ old('user') }}"/>
+		<input name="email" type="text" placeholder="Usuario" value="{{ old('email') }}"/>
 		<br>
-		<input name="pass" type="password" placeholder="Contraseña" />
+		<input name="password" type="password" placeholder="Contraseña" />
 		<br>
 		<input type="submit" value="Entrar" />
         <a href="regForm">Registrarse</a>

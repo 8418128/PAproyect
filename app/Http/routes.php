@@ -10,15 +10,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('login');
-});
-Route::get('regForm', function () {
-    return view('regForm');
-});
+
 Route::get('/main', 'MainController@myprofile');
-Route::post('login', 'UsersController@login');
-Route::post('register', 'UsersController@register');
+Route::post('doLog', 'UsersController@login');
+Route::post('doReg', 'UsersController@register');
 Route::post('uploadCanvas', 'CanvasController@save');
 Route::post('resize', 'CanvasController@resizeImage');
 Route::get('/canvas', function () {
@@ -36,3 +31,16 @@ Route::post('push', 'CanvasController@push');
 Route::get('lastmod', 'CanvasController@lastmod');
 Route::post('uploadPreview', 'CanvasController@savePreview');
 Route::get('uploadPreview', 'CanvasController@savePreview');
+
+Route::get('/', function () {
+    return view('login_snippet');
+});
+
+Route::get('register', function () {
+    return view('register_snippet');
+});
+
+Route::get('/profile','UsersController@getProfile');
+
+Route::get('/edit','UsersController@getProfile');
+Route::post('/saveProfile','UsersController@update');

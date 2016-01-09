@@ -5,19 +5,24 @@ var ctx, color = "#000";
 var globalsrc = '/socialnet/public/canvasimg/'
 var tempImg,tmpO;
 var tmpW;
-var canvas_id=999;
+var canvas_id=180;
 var invert = false;
 var time = 10000
 var timer;
 var offy = 0
 var offx = 0
 var moving = false;
+var imagesToRemove = []
 $(function(){
     document.oncontextmenu = function() {return false;};
     newCanvas();
     addListeners()
     paintMedias()
 
+
+    /**
+    *LIBRERIA PARA RECIBIR EVENTOS
+    */
     Pusher.log = function(msg) {
         console.log(msg);
     };
@@ -36,6 +41,10 @@ $(function(){
         }
     );
 
+
+    /**
+     *LISTENER DRAG AND DROP
+     */
     var target = document.getElementById("page");
     target.addEventListener("dragover", function(e){e.preventDefault();}, true);
     target.addEventListener("drop", function(e){
@@ -48,9 +57,9 @@ $(function(){
         resize_save($("#image"))
     });
 
-    //var timer = setInterval(deleteMedias, 6000);
 
-    var timer = setInterval(tryPreview, time);
+
+   var timer = setInterval(tryPreview, time);
 
 
 })
@@ -68,15 +77,9 @@ function resetInterval(){
     timer = setInterval(tryPreview, time);
 }
 
-function specialMoveBounds(){
-    $(document).mousedown(function(e){
-      if (moving){
-
-
-      }
-    })
-}
-
+/**
+ *LISTENER PARA MOVER EL CANVAS
+ */
 function leftListener(){
 
     $(document).mousedown(function(e){
@@ -120,6 +123,11 @@ function removeListeners(){
     canvas.removeEventListener("touchmove", null);
 }
 
+/**
+ *INTENTAR GUARDAR EL PREVIUW CON EL CANVAS ACTUAL;
+ * PUEDO?   ->NO
+ *          ->SI->SUBIR IMAGEN EN BASE 64->BORRAR LOS MEDIAS DE COUCHDB->GUARDAR PREVIEW EN COUCH
+ */
 function tryPreview(){
         console.log("trying update preview")
         $.ajax({
@@ -143,30 +151,43 @@ function tryPreview(){
                 var def = deleteMedias()
                 var canvas = document.getElementById("canvas");
                 var img64 = canvas.toDataURL("image/png");
-                $.ajax({
-                    type: "POST",
-                    url: "uploadPreview",
-                    data: {
-                        img64: img64,
-                        canvas_id: canvas_id
-                    },
-                    success: function(data) {
-                        console.log("SUCCESS uploadPreview: "+data);
+                def.done(function(d){
+                    $.each(d.rows,function(i,doc){
+                        if(doc.value.type!="stroke") {
+                            imagesToRemove[imagesToRemove.length] = doc.value.src
+                            console.log("---->>>>>>>" + doc.value.src)
+                        }
+                        removeDoc(doc.value._id,doc.value._rev)
 
-                    },
-                    error: function(status) {
-                        console.log("ERROR uploadPreview: "+status);
-                    }
 
-                }).done(function(img){
-                    def.done(function(){
-                        console.log("GUARDANDO")
-                        var date = Math.round(new Date().getTime()/1000)
-                        var doc = {"canvas_id": canvas_id,"created_at":date, "type": "background","src":img}
-                        saveDoc(doc)
                     })
+                    console.log("Borrado completo<<<<")
+                    console.log(imagesToRemove)
+                    $.ajax({
+                        type: "POST",
+                        url: "uploadPreview",
+                        data: {
+                            img64: img64,
+                            canvas_id: canvas_id,
+                            images:imagesToRemove
+                        },
+                        success: function(data) {
+                            console.log("SUCCESS uploadPreview: "+data);
 
+                        },
+                        error: function(xhr, status, error) {
+                            var err = eval(xhr.responseText);
+                            console.log(err.Message);
+                        }
+
+                    }).done(function(img){
+                            console.log("GUARDANDO")
+                            var date = Math.round(new Date().getTime()/1000)
+                            var doc = {"canvas_id": canvas_id,"created_at":date, "type": "background","src":img}
+                            saveDoc(doc)
+                    })
                 })
+
                 resetInterval()
             }
         })
@@ -174,7 +195,9 @@ function tryPreview(){
 }
 
 
-
+/**
+ *PETICION AJAX PARA CAMBIAR TAMAÑO IMAGEN
+ */
 function resize(width,height){
     return $.ajax({
         type: "POST",
@@ -194,6 +217,9 @@ function resize(width,height){
     })
 }
 
+/**
+ *GUARDAR IMAGEN Y cambiar tamaño si es preciso
+ */
 function resize_save(div){
     var o = $('#image').freetrans('getOptions')
     if(o.scalex!=1||o.scaley!=1){
@@ -208,6 +234,9 @@ function resize_save(div){
     }
 }
 
+/**
+ *GUARDAR IMAGEN EN COUCH Y LLAMAR A PUSH PARA EL EVENTO
+ */
 function saveImgCanvas(div){
     var date = Math.round(new Date().getTime()/1000)
     var o = div.freetrans('getOptions')
@@ -246,6 +275,11 @@ function saveImgCanvas(div){
 }
 
 
+/**
+ *METODO RECURSIVO PARA PINTAR LOS MEDIAS EN EL CANVAS
+ * (las imagenes tienen que esperar a ser cargadas, y no se llama
+ * al pintar siguiente media hasta que esta no este cargada )
+ */
 function setMedia(rows,i){
 
         var m = rows[i].value
@@ -285,10 +319,13 @@ function setMedia(rows,i){
 }
 
 
-
+/**
+ *PINTAR TRAZOS
+ */
 function setStroke(media){
     var xs = media.x
     var ys = media.y
+    ctx.moveTo(xs[0],xs[0])
     ctx.beginPath();
     ctx.strokeStyle = media.color;
     for (var i = 0; i < xs.length; i++) {
@@ -299,6 +336,9 @@ function setStroke(media){
     ctx.strokeStyle = color
 }
 
+/**
+ *PINTAR IMAGEN
+ */
 function setImg(image,x,y,angle)
 {
     var TO_RADIANS = Math.PI/180;
@@ -311,7 +351,9 @@ function setImg(image,x,y,angle)
 
 
 
-
+/**
+ *GUARDAR DOCUMENTO EN COUCH
+ */
 function saveDoc(doc){
     var db = $.couch.db("media");
     db.saveDoc(doc, {
@@ -324,6 +366,10 @@ function saveDoc(doc){
     })
 }
 
+
+/**
+ *CARGAR UNA IMAGEN TEMPORAL DRAGGABLE Y RESIZABLE
+ */
 function loadImage(src){
     //	Prevent any non-image file type from being read.
     if(!src.type.match(/image.*/)){
@@ -381,6 +427,9 @@ function loadImage(src){
     reader.readAsDataURL(src);
 }
 
+/**
+ *BORRAR MEDIA DE COUCH
+ */
 function removeDoc(id,rev){
     var doc = {
         _id: id,
@@ -396,7 +445,11 @@ function removeDoc(id,rev){
     });
 }
 
+/**
+ *BORRAR TODOS LOS MEDIAS DE COUCH CON EL CANVAS_ID CORRESPONDIENTE
+ */
 function deleteMedias(){
+    imagesToRemove = []
     console.log("BORRANDO")
     $.couch.urlPrefix = "https://socpa.cloudant.com";
     $.couch.login({
@@ -408,9 +461,7 @@ function deleteMedias(){
         key: canvas_id,
         reduce: false,
         success: function(data) {
-            $.each(data.rows,function(i,doc){
-                removeDoc(doc.id,doc.value)
-            })
+
         },
         error: function(status) {
             console.log(status);
@@ -419,6 +470,9 @@ function deleteMedias(){
     })
 }
 
+/**
+ *PINTAR SACANDO LOS MEDIAS DE COUCH
+ */
 function paintMedias(){
     $.couch.urlPrefix = "https://socpa.cloudant.com";
     $.couch.login({
@@ -450,7 +504,9 @@ function paintMedias(){
 
 
 
-//********INITIALIZE CANVAS********/
+/**
+ *INICIALIZAR CANVAS
+ */
 function newCanvas(){
     //define and resize canvas
     document.getElementById("content").style.height = window.innerHeight-90;
@@ -467,8 +523,9 @@ function newCanvas(){
     leftListener()
 }
 
-//***PAINT METHODS***/
-
+/**
+ *INTENTAR GUARDAR EL PREVIUW CON EL CANVAS ACTUAL
+ */
 function selectColor(el){
     for(var i=0;i<document.getElementsByClassName("palette").length;i++){
         document.getElementsByClassName("palette")[i].style.borderColor = "#777";
@@ -477,11 +534,16 @@ function selectColor(el){
     el.style.borderColor = "#fff";
     el.style.borderStyle = "dashed";
     color = window.getComputedStyle(el).backgroundColor;
-    ctx.beginPath();
+    //ctx.beginPath();
     ctx.strokeStyle = color;
     //ctx.lineWidth = 15;
 }
-// prototype to	start drawing on touch using canvas moveTo and lineTo
+
+
+
+/**
+ *HANDLERS PARA PINTAR
+ */
 var drawTouch = function() {
     var start = function(e) {
         ctx.beginPath();
@@ -529,10 +591,11 @@ var drawMouse = function() {
     var start = function(e) {
             console.log("START MOUSE")
             clicked = 1;
-            ctx.beginPath();
+
             x = e.pageX - offx;
             y = e.pageY - offy;
             ctx.moveTo(x, y);
+            ctx.beginPath();
             xs[i] = x;
             ys[i++] = y;
     };
@@ -561,13 +624,15 @@ var drawMouse = function() {
                     "x": xs,
                     "y": ys
                 }
-                saveDoc(doc);
+
                 $.ajax({
                     type: "POST",
                     url: "push",
                     data: {
                         doc: doc
                     }
+                }).done(function(){
+                    saveDoc(doc);
                 })
             }
             xs = [];

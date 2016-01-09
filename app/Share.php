@@ -4,7 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class share extends Model
 {
-    //comentario
+    protected $table = 'canvas';
+
 }

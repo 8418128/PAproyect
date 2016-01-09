@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <form action="register" method="POST">
+    <form action="register" method="POST" enctype="multipart/form-data" >
         @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <ul>
@@ -19,12 +19,18 @@
             </div>
             <br>
         @endif
-            <input name="nick" type="text" placeholder="Usuario" value="{{ old('nick') }}"/>
+            <input name="name" type="text" placeholder="Nombre" value="{{ old('name') }}"/>
+            <br>
+            <input name="surname" type="text" placeholder="Apellidos" value="{{ old('surname') }}"/>
+            <br>
+            <input name="birthDate" type="text" placeholder="Fecha de nacimiento" value="{{ old('birthDate') }}"/>
             <br>
             <input name="email" type="text" placeholder="Email" value="{{ old('email') }}"/>
-        <br>
-        <input name="pass" type="password" placeholder="Contraseña" />
-        <br>
+            <br>
+            <input name="photo" type="file" placeholder="Foto perfil" value="{{ old('photo') }}"/>
+            <br>
+            <input name="password" type="password" placeholder="Contraseña" />
+            <br>
         <input type="submit" value="Registrarse" />
     </form>
 @endsection

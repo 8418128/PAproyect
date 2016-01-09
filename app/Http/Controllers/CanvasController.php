@@ -13,6 +13,14 @@ use App\Canvas;
 use Illuminate\Http\Request;
 class CanvasController extends Controller
 {
+
+    function gallery(Request $request){
+
+    }
+
+    /**
+     *OBTENER 0 O 1 EN BASE A SI EL CANVAS A SIDO MODIFICADO HACE 5 MINUTOS
+     */
     function lastmod(Request $request){
         $canvas_id = $request->input('canvas_id');
 
@@ -28,6 +36,9 @@ class CanvasController extends Controller
 
     }
 
+    /**
+     *PUSHEAR EVENTO
+     */
     function push(Request $request){
         $json = $request->input('doc');
         event(new \App\Events\ChEvent($json['canvas_id'],$json));
@@ -35,6 +46,9 @@ class CanvasController extends Controller
     }
 
 
+    /**
+     *GUARDAR IMAGEN EN BASE 64
+     */
     function save(Request $request){
         $img = $request->input('img64');
         $filteredData=substr($img, strpos($img, ",")+1);
@@ -48,44 +62,64 @@ class CanvasController extends Controller
         return $uniq.'.png';
     }
 
+    /**
+     *GUARDAR EL PREVIEW CON UN 7% DE ALTURA Y DE ANCHURA AL ORIGINAL
+     * UPDATEAR CANVAS Y BORRAR IMAGENES
+     */
     function savePreview(Request $request){
         $canvas_id = $request->input('canvas_id');
         $img = self::save($request);
         $canvas = Canvas::find(/*$canvas_id*/7);
         $previuos_preview = $canvas->preview;
-        /*if(!$previuos_preview->isEmpty()) {
+        if($previuos_preview!="") {
             $f = public_path("canvasimg") . "\\" . $previuos_preview;
             File::delete($f);
-        }*/
-        $canvas->preview=$img;
+        }
+        $path = public_path("canvasimg") . "\\" . $img;
+        list($width, $height) = getimagesize($path);
+        $preview = "preview".$img;
+        self::smart_resize_image(null , file_get_contents($path), $width*0.07, $height*0.07, false , "preview/".$preview, true , false ,100 );
+        $canvas->preview=$preview;
         $canvas->save();
+
+        $images=$request->input('images');
+
+        foreach($images as $image){
+            $f = public_path("canvasimg") . "\\" . $image;
+            File::delete($f);
+        }
+
         return $img;
 
 
     }
 
 
-
+    /**
+     *CAMBIAR TAMAÑO IMAGEN
+     */
     function resizeImage(Request $request){
         $img = $request->input('src');
         $width = $request->input('width');
         $height = $request->input('height');
         $file = public_path("canvasimg").'\\'.$img;
 
-        //indicate the path and name for the new resized file
+
         $uniq = uniqid().'.png';
         $resizedFile =  public_path("canvasimg") . "\\" . $uniq;
-        //call the function (when passing path to pic)
+
         self::smart_resize_image(null , file_get_contents($file), $width, $height, false , $resizedFile , true , false ,100 );
 
         File::delete($file);
-        //rename($resizedFile,public_path("canvasimg").'\\'.$img);
 
         return $uniq;
     }
 
 
 
+    /**
+     *METODO MÁGICO PARA CAMBIAR TAMAÑO DE IMAGENES
+     */
     static function smart_resize_image($file,
                                 $string             = null,
                                 $width              = 0,
