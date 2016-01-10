@@ -1,6 +1,5 @@
 @extends('master')
-@section('jscript'){{asset('generalJs/login_snippet.js')}}@endsection
-<link href="{{asset('style/login_snippet.css')}}" rel="stylesheet" type="text/css">
+
 @section('title', 'Login')
 <header>Fakebook</header>
 <div class="login-container">

@@ -1,22 +1,57 @@
+<!doctype html>
+
 <html>
-<head></head>
+<head>
+    <title>Profile view</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link href="{{asset('style/profile.css')}}" rel="stylesheet" type="text/css">
+       <link rel="stylesheet" href="style\menu.css">
+</head>
 <body>
-<div>
-    <table>
-        <tr>
-            <td>Nombre</td><td>{{$name}}</td><td rowspan="2"><img src="image/{{$photo}}" width="100px"></td><!-- CSS -->
-        </tr>
-        <tr>
-            <td>Apellidos</td><td>{{$surname}}</td>
-        </tr>
-        <tr>
-            <td>Fecha de Nacimiento</td><td>{{$birthdate}}</td>
-        </tr>
-        <tr>
-            <td>Email</td><td>{{$email}}</td>
-        </tr>
-    </table>
+<header>
+    <!-- hamburger menu: http://codepen.io/g13nn/pen/eHGEF -->
+    <button class="hamburger">&#9776;</button>
+    <button class="cross">&#735;</button>
+    My Profile
+    <button class="friends"><img src="style/group_contact-512.png"></button>
+    <button class="cross2">&#735;</button>
+</header>
+<div class="menu" id = "menu1">
+    <ul>
+        <a href="#"><li>Gallery</li></a>
+        <a href="#"><li>Atelier</li></a>
+        <a href="#"><li>Museum</li></a>
+        <a href="profile"><li>My Profile</li></a>
+    </ul>
+</div>
+<div class="menu" id = "menu2">
+    <ul>
+        <a href="#"><li>Friend1</li></a>
+        <a href="#"><li>Friend2</li></a>
+        <a href="#"><li>Friend3</li></a>
+    </ul>
+</div>
+<div class = "container">
+
+        <img src="image/{{$photo}}" width="100px">
+       <p>Nombre: {{$name}}</p>
+        <p>Apellidos: {{$surname}}</p>
+       <p>Fecha de Nacimiento: {{$birthdate}}</p>
+        <p>Email: {{$email}}</p>
+
     <a href="edit"><button>Editar</button></a>
 </div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<!-- Slidebars -->
+<script src="generalJs\menu.js"></script>
+<script>
+    (function($) {
+        $(document).ready(function() {
+            $.slidebars();
+        });
+    }) (jQuery);
+</script>
 </body>
 </html>
