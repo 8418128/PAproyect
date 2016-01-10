@@ -19,28 +19,30 @@
 </header>
 <div class="menu" id = "menu1">
     <ul>
-        <a href="#"><li>Gallery</li></a>
-        <a href="#"><li>Atelier</li></a>
-        <a href="#"><li>Museum</li></a>
-        <a href="profile"><li>My Profile</li></a>
+        <li><a href="#">Gallery</a></li>
+        <li><a href="#">Atelier</a></li>
+        <li><a href="#">Museum</a></li>
+        <li><a href="profile">My Profile</a></li>
     </ul>
 </div>
 <div class="menu" id = "menu2">
     <ul>
-        <a href="#"><li>Friend1</li></a>
-        <a href="#"><li>Friend2</li></a>
-        <a href="#"><li>Friend3</li></a>
+        <li><a href="#">Friend1</a></li>
+        <li><a href="#">Friend2</a></li>
+        <li><a href="#">Friend3</a></li>
+        <li><a href="#">Friend4</a></li>
+
     </ul>
 </div>
 <div class = "container">
 
         <img src="image/{{$photo}}" width="100px">
-       <p>Nombre: {{$name}}</p>
-        <p>Apellidos: {{$surname}}</p>
-       <p>Fecha de Nacimiento: {{$birthdate}}</p>
+       <p>First name: {{$name}}</p>
+        <p>Last name: {{$surname}}</p>
+       <p>Date of birth: {{$birthdate}}</p>
         <p>Email: {{$email}}</p>
 
-    <a href="edit"><button>Editar</button></a>
+    <a href="edit"><button>Edit profile</button></a>
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 

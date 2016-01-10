@@ -84,7 +84,7 @@
 </header>
 <div class="menu" id = "menu1">
     <ul>
-        <li> <a href="#">Gallery</a></li>
+        <li><a href="#">Gallery</a></li>
         <li><a href="#">Atelier</a></li>
         <li><a href="#">Museum</a></li>
         <li><a href="profile">My Profile</a></li>
@@ -103,27 +103,27 @@
     <table>
         <tr>
         <div class="fileUpload">
-            Imagen de perfil: <input type="file" class="upload" id="imagen" />
+            Profile image: <input type="file" class="upload" id="imagen" />
         </div>
         </tr>
         <tr>
-            <td>Nombre</td><td><input type="text" name="name" value="{{$name}}">
+            <td>First name: </td><td><input type="text" name="name" value="{{$name}}">
 
             </td>
         </tr>
         <tr>
-            <td>Apellidos</td><td><input type="text" name="surname" value="{{$surname}}"></td>
+            <td>Last name: </td><td><input type="text" name="surname" value="{{$surname}}"></td>
         </tr>
         <tr>
-            <td>Fecha de Nacimiento</td><td><input type="text" name="birthdate" value="{{$birthdate}}"></td>
+            <td>Date of birth: </td><td><input type="text" name="birthdate" value="{{$birthdate}}"></td>
         </tr>
         <tr>
-            <td>Email</td><td><input type="text" name="email" value="{{$email}}"></td>
+            <td>Email: </td><td><input type="text" name="email" value="{{$email}}"></td>
         </tr>
     </table>
         <input type="hidden" value="{{$email}}" name="user">
 
-        <button id = "enviar" class="btn btn-info btn-block register" type="submit" name = "enviar">Enviar</button>
+        <button id = "enviar" class="btn btn-info btn-block register" type="submit" name = "enviar">Keep changes</button>
     </form>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
