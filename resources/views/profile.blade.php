@@ -36,13 +36,13 @@
 </div>
 <div class = "container">
 
-        <img src="image/{{$photo}}" width="100px">
+        <img src="generalImg/{{$photo}}" width="100px">
        <p>First name: {{$name}}</p>
         <p>Last name: {{$surname}}</p>
        <p>Date of birth: {{$birthdate}}</p>
         <p>Email: {{$email}}</p>
 
-    <a href="edit"><button>Edit profile</button></a>
+    <a href="editProfile"><button>Edit profile</button></a>
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 

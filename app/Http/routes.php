@@ -42,5 +42,5 @@ Route::get('register', function () {
 
 Route::get('/profile','UsersController@getProfile');
 
-Route::get('/edit','UsersController@getProfile');
-Route::post('/saveProfile','UsersController@update');
+Route::get('/editProfile','UsersController@getProfile2');
+Route::post('/updateProfile','UsersController@update');

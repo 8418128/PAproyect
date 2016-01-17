@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Hash;
 use App\User;
 use Validator;
 use Input;
+use File;
 class UsersController extends Controller {
 
   public function login(Request $request) { //VALIDAR EL LOGIN
@@ -36,7 +37,7 @@ class UsersController extends Controller {
         if($photo==""){
             $photo="noimg.png";
         }
-        if($request->path()=='profile'){
+        /*if($request->path()=='profile'){
             return view('profile', ['name' => $user->name,
                 'surname'=>$user->surname,
                 'photo'=>$photo,
@@ -48,7 +49,26 @@ class UsersController extends Controller {
                 'photo'=>$photo,
                 'birthdate'=>$user->birthDate,
                 'email'=>$user->email]);
+        }*/
+        return view('profile', ['name' => $user->name,
+            'surname'=>$user->surname,
+            'photo'=>$photo,
+            'birthdate'=>$user->birthDate,
+            'email'=>$user->email]);
+
+    }
+
+    public function getProfile2(Request $request){
+        $user=$request->session()->get('user_obj');
+        $photo=$user->photo;
+        if($photo==""){
+            $photo="noimg.png";
         }
+        return view('editProfile', ['name' => $user->name,
+            'surname'=>$user->surname,
+            'photo'=>$photo,
+            'birthdate'=>$user->birthDate,
+            'email'=>$user->email]);
 
     }
 
@@ -58,7 +78,7 @@ class UsersController extends Controller {
         $rules = array(
             'name' => 'required',
             'surname' => 'required',
-            'birthDate' => 'required',
+            'birthdate' => 'required',
             'password' => 'required',
             'confirm_password' => 'required',
             'email' => 'required|email|unique:users',
@@ -77,7 +97,7 @@ class UsersController extends Controller {
         $name = $request->input("name");
         $surname = $request->input("surname");
 
-        $birthdate = $request->input("birthDate");
+        $birthdate = $request->input("birthdate");
         if(!preg_match('/^([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})$/',$birthdate)){
             return back()
                     ->withErrors('La fecha no es valida '.$birthdate.' (dd-mm-aaaa)')
@@ -111,7 +131,7 @@ class UsersController extends Controller {
 
         $imageName = uniqid().".".$request->file('photo')->getClientOriginalExtension();
         echo $imageName;
-        $request->file('photo')->move(public_path("image")."\\",$imageName);
+        $request->file('photo')->move(public_path("generalImg")."\\",$imageName);
 
         return $imageName;
     }
@@ -126,12 +146,14 @@ class UsersController extends Controller {
     public function update(Request $request){//Update perfil usuario
 
         $user_old = $request->session()->get('user_obj');
+
+
+
         $rules = array(
             'name' => 'required',
             'surname' => 'required',
-            'birthDate' => 'required',
-            'password' => 'required',
-            'email' => 'required|email|unique:users',
+            'birthdate' => 'required',
+            'email' => 'required|email',
 
         );
 
@@ -143,26 +165,36 @@ class UsersController extends Controller {
                 ->withInput();
         }
 
+        $email= User::where('email','<>',$user_old->email)->where('email','like', $request->input('email'))->get();
+        if(count($email)!= 0){
+            return back()
+                ->withErrors('El email ya esta registrado')
+                ->withInput();
+        }
 
-        $birthdate = $request->input("birthDate");
-        if(!preg_match('/^([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})$/',$birthdate)){
+
+        $birthdate = $request->input("birthdate");
+       if(!preg_match('/^([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})$/',$birthdate)){
             return back()
                 ->withErrors('La fecha no es valida '.$birthdate.' (dd-mm-aaaa)')
                 ->withInput();
         }
         $photo = $request->file("photo");
+
         if(!is_null($photo)){
-            //borrar foto antigua
+
+            $f=public_path("generalImg")."\\".$user_old->photo;
+            File::delete($f);
             $photo=$this->savePhoto($request);
             $user_old->photo=$photo;
         }
         $user_old->name=$request->input("name");
         $user_old->surname=$request->input("surname");
-        $user_old->birthdate=$request->input("birthDate");
+        $user_old->birthDate=$request->input("birthdate");
         $user_old->email=$request->input("email");
 
         $user_old->save();
-        Session::forget('user_obj');
+        //Session::forget('user_obj');
         $request->session()->put('user_obj', $user_old);
         return redirect('/profile');
 

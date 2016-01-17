@@ -66,6 +66,9 @@
         }
     </script>
     <style>
+        .fileUpload{
+            background: url("generalImg/{{$photo}}");
+        }
 
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -98,12 +101,22 @@
     </ul>
 </div>
 <div class = "container">
-    <form class = "form-box" method="post" action="saveProfile" enctype="multipart/form-data">
+    @if (count($errors) > 0)
+        <div>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        <br>
+    @endif
+    <form class = "form-box" method="post" action="updateProfile" enctype="multipart/form-data">
 
     <table>
-        <tr>
+        <tr> Profile image:
         <div class="fileUpload">
-            Profile image: <input type="file" class="upload" id="imagen" />
+            <input name="photo" type="file" class="upload" id="imagen" />
         </div>
         </tr>
         <tr>
