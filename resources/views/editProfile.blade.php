@@ -82,15 +82,16 @@
     <button class="hamburger">&#9776;</button>
     <button class="cross">&#735;</button>
     Edit Profile
-    <button class="friends"><img src="style/group_contact-512.png"></button>
+    <button class="friends"><img src="generalImg/{{$photo}}"></button>
     <button class="cross2">&#735;</button>
 </header>
 <div class="menu" id = "menu1">
     <ul>
         <li><a href="#">Gallery</a></li>
         <li><a href="#">Atelier</a></li>
-        <li><a href="#">Museum</a></li>
-        <li><a href="profile">My Profile</a></li>
+        <li><a href="home">Home</a></li>
+        <li><a href="search">Buscar amigos</a></li>
+        <li><a href="myProfile">My Profile</a></li>
     </ul>
 </div>
 <div class="menu" id = "menu2">
@@ -150,5 +151,16 @@
         }) (jQuery);
     </script>
 </div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<!-- Slidebars -->
+<script src="generalJs\menu.js"></script>
+<script>
+    (function($) {
+        $(document).ready(function() {
+            $.slidebars();
+        });
+    }) (jQuery);
+</script>
 </body>
 </html>

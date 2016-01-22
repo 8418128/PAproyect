@@ -20,7 +20,7 @@ class UsersController extends Controller {
         if(!is_null($prev_path)){
             return redirect($prev_path);
         }
-        return redirect('/profile');
+        return redirect('home');
 
       } 
       else {
@@ -31,25 +31,12 @@ class UsersController extends Controller {
 
     }
 
-    public function getProfile(Request $request){
+    public function getMyProfile(Request $request){
         $user=$request->session()->get('user_obj');
        $photo=$user->photo;
-        if($photo==""){
-            $photo="noimg.png";
+        if($photo=="") {
+            $photo = "noimg.png";
         }
-        /*if($request->path()=='profile'){
-            return view('profile', ['name' => $user->name,
-                'surname'=>$user->surname,
-                'photo'=>$photo,
-                'birthdate'=>$user->birthDate,
-                'email'=>$user->email]);
-        }else if($request->path()=='edit'){
-            return view('editProfile', ['name' => $user->name,
-                'surname'=>$user->surname,
-                'photo'=>$photo,
-                'birthdate'=>$user->birthDate,
-                'email'=>$user->email]);
-        }*/
         return view('profile', ['name' => $user->name,
             'surname'=>$user->surname,
             'photo'=>$photo,
@@ -72,13 +59,29 @@ class UsersController extends Controller {
 
     }
 
+    public function getProfile3($id){
+        $user=User::getUserById($id);
+        //echo $user->get(0)->name;
+        if($user->get(0)->photo==""){
+            $photo="noimg.png";
+        }else{
+            $photo=$user->get(0)->photo;
+        }
+       return view('friendProfile', ['name' => $user->get(0)->name,
+            'surname'=>$user->get(0)->surname,
+            'photo'=>$photo,
+            'birthdate'=>$user->get(0)->birthDate,
+            'email'=>$user->get(0)->email]);
+
+    }
+
 
     public function register(Request $request)//REGISTRAR
     {
         $rules = array(
             'name' => 'required',
             'surname' => 'required',
-            'birthdate' => 'required',
+            'birthDate' => 'required',
             'password' => 'required',
             'confirm_password' => 'required',
             'email' => 'required|email|unique:users',
@@ -97,7 +100,7 @@ class UsersController extends Controller {
         $name = $request->input("name");
         $surname = $request->input("surname");
 
-        $birthdate = $request->input("birthdate");
+        $birthdate = $request->input("birthDate");
         if(!preg_match('/^([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})$/',$birthdate)){
             return back()
                     ->withErrors('La fecha no es valida '.$birthdate.' (dd-mm-aaaa)')
@@ -123,7 +126,7 @@ class UsersController extends Controller {
         $new_user->save();
 
         $request->session()->put('user_obj', $new_user);
-       return redirect('/main');
+       return redirect('home');
 
     }
 
@@ -196,7 +199,7 @@ class UsersController extends Controller {
         $user_old->save();
         //Session::forget('user_obj');
         $request->session()->put('user_obj', $user_old);
-        return redirect('/profile');
+        return redirect('myProfile');
 
     }
       
