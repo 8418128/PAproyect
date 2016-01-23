@@ -20,7 +20,7 @@
             <li><a href="#">Atelier</a></li>
             <li><a href="home">Home</a></li>
             <li><a href="search">Buscar amigos</a></li>
-            <li><a href="myProfile">My Profile</a></li>
+            <li><a href="/socialnet/public/myProfile">My Profile</a></li>
         </ul>
     </div>
     <div class="menu" id = "menu2">
