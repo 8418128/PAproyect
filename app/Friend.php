@@ -33,6 +33,7 @@ class Friend extends Model
     }
 
     static public function updateFriend($friend){
+
         Friend::where('user','=',$friend->user)->where('friend','=',$friend->friend)->update(['status'=>1]);
 
     }
