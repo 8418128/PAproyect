@@ -85,14 +85,17 @@ public function send($friendId, Request $request){
 
 //var_dump( User::findByUserName($name));
        //return response()->json(['users'=> User::findByUserName($name)]);
-        $users=User::findByUserName($name);
         $us=[];
-        foreach($users as $u){
-            $us[]=$u;
+        if($name!=''){
+            $users=User::findByUserName($name);
 
+            foreach($users as $u){
+                $us[]=$u;
+
+            }
         }
+        return view('lookForUsers', ['users' => $us]);
 
-         return view('lookForUsers', ['users' => $us]);
 
     }
 
