@@ -15,6 +15,7 @@ class User extends Model
 			return $u;
 		}
 		return null;
+
 	}
 
 	static public function findByUserEmail($email){ //OBTENER USUARIO MEDIANTE EMAIL
@@ -25,11 +26,26 @@ class User extends Model
 		return null;
 	}
 
+
+	static public function findByUserName($name){ //OBTENER USUARIO MEDIANTE EMAIL
+		$u = User::where('name','like', $name)->first();
+		if(!is_null($u)) {
+			return $u;
+		}
+		return null;
+	}
+
+
 	static public function alreadyIn($user){
 		if(!is_null(User::where('email','like', $user)->first())){
 			return true;
 		}
 		return false;
+	}
+
+	static public function getUserById($id){
+		$user=User::where('idUser','=',$id)->get();
+		return $user;
 	}
 
 	public function gallery(){

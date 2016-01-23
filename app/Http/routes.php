@@ -13,14 +13,34 @@
 
 Route::get('/main', 'MainController@myprofile');
 Route::post('doLog', 'UsersController@login');
+Route::get('home',function(){return view('home');});
 Route::post('doReg', 'UsersController@register');
+Route::get('search', 'FriendsController@getPeticiones');
 Route::post('uploadCanvas', 'CanvasController@save');
 Route::post('resize', 'CanvasController@resizeImage');
 Route::get('/canvas', function () {
     return view('canvas');
 });
+Route::get('/', function () {
+    return view('login_snippet');
+});
 
-Route::get('/joder','CanvasController@r2');
+Route::get('register', function () {
+    return view('register_snippet');
+});
+
+Route::get('/myProfile','UsersController@getMyProfile');
+Route::get('/editProfile','UsersController@getProfile2');
+Route::post('/updateProfile','UsersController@update');
+Route::get('friendProfile/{id}','UsersController@getProfile3');
+Route::get('sendFriend/{id}','FriendsController@send');
+Route::get('search2','FriendsController@getPeticiones');
+Route::post('lookFor','FriendsController@lookFor');
+Route::get('addFriend/{id}','FriendsController@add');
+Route::get('declinedFriend/{id}','FriendsController@declined');
+
+
+
 
 Route::get('/broadcast/{channel}', function($channel) {
     return view('welcome')->with('channel',$channel);
@@ -32,9 +52,6 @@ Route::get('lastmod', 'CanvasController@lastmod');
 Route::post('uploadPreview', 'CanvasController@savePreview');
 Route::get('uploadPreview', 'CanvasController@savePreview');
 
-Route::get('/', function () {
-    return view('login_snippet');
-});
 
 Route::get('register', function () {
     return view('register_snippet');

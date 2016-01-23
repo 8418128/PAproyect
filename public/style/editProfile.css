@@ -82,11 +82,12 @@ html,body{
     position: relative;
     overflow: hidden;
     margin: 10px;
-    background: url("generalImg/{{$photo}}");
+
     background-size: 120px 150px;
     background-repeat: no-repeat;
     width: 120px;
     height: 150px;
+    left: 30%;
 
 }
 .fileUpload input.upload {

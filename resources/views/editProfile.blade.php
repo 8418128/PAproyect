@@ -62,10 +62,14 @@
                 default:
                     return false;
                     break;
+
             }
         }
     </script>
     <style>
+        .fileUpload{
+            background: url("generalImg/{{$photo}}");
+        }
 
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -79,15 +83,16 @@
     <button class="hamburger">&#9776;</button>
     <button class="cross">&#735;</button>
     Edit Profile
-    <button class="friends"><img src="style/group_contact-512.png"></button>
+    <button class="friends"><img src="generalImg/{{$photo}}"></button>
     <button class="cross2">&#735;</button>
 </header>
 <div class="menu" id = "menu1">
     <ul>
         <li><a href="#">Gallery</a></li>
         <li><a href="#">Atelier</a></li>
-        <li><a href="#">Museum</a></li>
-        <li><a href="profile">My Profile</a></li>
+        <li><a href="home">Home</a></li>
+        <li><a href="search">Buscar amigos</a></li>
+        <li><a href="myProfile">My Profile</a></li>
     </ul>
 </div>
 <div class="menu" id = "menu2">
@@ -98,12 +103,22 @@
     </ul>
 </div>
 <div class = "container">
-    <form class = "form-box" method="post" action="saveProfile" enctype="multipart/form-data">
+    @if (count($errors) > 0)
+        <div>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        <br>
+    @endif
+    <form class = "form-box" method="post" action="updateProfile" enctype="multipart/form-data">
 
     <table>
-        <tr>
+        <tr> Profile image:
         <div class="fileUpload">
-            Profile image: <input type="file" class="upload" id="imagen" />
+            <input name="photo" type="file" class="upload" id="imagen" />
         </div>
         </tr>
         <tr>
@@ -137,5 +152,16 @@
         }) (jQuery);
     </script>
 </div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<!-- Slidebars -->
+<script src="generalJs\menu.js"></script>
+<script>
+    (function($) {
+        $(document).ready(function() {
+            $.slidebars();
+        });
+    }) (jQuery);
+</script>
 </body>
 </html>
