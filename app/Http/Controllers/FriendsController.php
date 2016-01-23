@@ -98,6 +98,7 @@ public function send($friendId, Request $request){
             Friend::updateFriend($f);
         }
 
+
         return redirect('search2');
     }
 

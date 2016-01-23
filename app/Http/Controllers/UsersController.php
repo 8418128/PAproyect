@@ -190,6 +190,7 @@ class UsersController extends Controller {
             File::delete($f);
             $photo=$this->savePhoto($request);
             $user_old->photo=$photo;
+
         }
         $user_old->name=$request->input("name");
         $user_old->surname=$request->input("surname");

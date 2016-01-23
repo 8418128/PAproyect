@@ -27,6 +27,7 @@
     </ul>
 </div>
 <div class="menu" id = "menu2">
+
     <ul>
         <a href="#"><li>Friend1</li></a>
         <a href="#"><li>Friend2</li></a>

@@ -50,6 +50,7 @@
                     </div>
                 @endforeach
             @else
+
                 <p>No tienes peticiones pendientes.</p>
             @endif
 

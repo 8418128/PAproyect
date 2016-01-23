@@ -20,6 +20,7 @@ class Friend extends Model
         return $this->hasOne(User::class,'idUser','friend');
     }
 
+
     static public function getPeticionFriend($user){
         return Friend::where('status','=','0')->where('user','=',$user)->where('action_user','=','0')->get();
     }

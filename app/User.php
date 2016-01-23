@@ -15,6 +15,7 @@ class User extends Model
 			return $u;
 		}
 		return null;
+
 	}
 
 	static public function findByUserEmail($email){ //OBTENER USUARIO MEDIANTE EMAIL
