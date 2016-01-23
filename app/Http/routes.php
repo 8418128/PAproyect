@@ -39,9 +39,6 @@ Route::post('lookFor','FriendsController@lookFor');
 Route::get('addFriend/{id}','FriendsController@add');
 Route::get('declinedFriend/{id}','FriendsController@declined');
 
-
-
-
 Route::get('/broadcast/{channel}', function($channel) {
     return view('welcome')->with('channel',$channel);
 });
@@ -53,3 +50,16 @@ Route::post('uploadPreview', 'CanvasController@savePreview');
 Route::get('uploadPreview', 'CanvasController@savePreview');
 
 
+Route::get('register', function () {
+    return view('register_snippet');
+});
+
+Route::get('/profile','UsersController@getProfile');
+
+Route::get('/edit','UsersController@getProfile');
+Route::post('/saveProfile','UsersController@update');
+
+Route::get('chats','ChatController@getChatFromFriend');
+Route::get('/chaty', function () {
+    return view('chatView');
+});

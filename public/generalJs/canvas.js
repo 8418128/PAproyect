@@ -1,3 +1,5 @@
+
+
 /**
  * Created by S on 27/12/2015.
  */
@@ -21,8 +23,8 @@ $(function(){
 
 
     /**
-    *LIBRERIA PARA RECIBIR EVENTOS
-    */
+     *LIBRERIA PARA RECIBIR EVENTOS
+     */
     Pusher.log = function(msg) {
         console.log(msg);
     };
@@ -59,21 +61,20 @@ $(function(){
 
 
 
-   var timer = setInterval(tryPreview, time);
+    var timer = setInterval(tryPreview, time);
 
 
 })
 
 function toggleMove(){
     if(moving)
-    moving=false;
+        moving=false;
     else
-    moving=true
+        moving=true
 }
 
 function resetInterval(){
     clearInterval(timer);
-    timer = setInterval(tryPreview, time);
     timer = setInterval(tryPreview, time);
 }
 
@@ -124,73 +125,73 @@ function removeListeners(){
 }
 
 /**
- *INTENTAR GUARDAR EL PREVIUW CON EL CANVAS ACTUAL;
+ *INTENTAR GUARDAR EL PREVIEW CON EL CANVAS ACTUAL;
  * PUEDO?   ->NO
  *          ->SI->SUBIR IMAGEN EN BASE 64->BORRAR LOS MEDIAS DE COUCHDB->GUARDAR PREVIEW EN COUCH
  */
 function tryPreview(){
-        console.log("trying update preview")
-        $.ajax({
-            type: "GET",
-            url: "lastmod",
-            data: {
-                canvas_id: canvas_id
-            },
-            success: function(data) {
-                console.log("SUCCESS: ----->"+data);
+    console.log("trying update preview")
+    $.ajax({
+        type: "GET",
+        url: "lastmod",
+        data: {
+            canvas_id: canvas_id
+        },
+        success: function(data) {
+            console.log("SUCCESS: ----->"+data);
 
 
-            },
-            error: function(status) {
-                console.log("ERROR: "+status);
-            }
-        }).done(function(data){
+        },
+        error: function(status) {
+            console.log("ERROR: "+status);
+        }
+    }).done(function(data){
 
-            if(data==1){
-                console.log("UPDATING PREVIEW")
-                var def = deleteMedias()
-                var canvas = document.getElementById("canvas");
-                var img64 = canvas.toDataURL("image/png");
-                def.done(function(d){
-                    $.each(d.rows,function(i,doc){
-                        if(doc.value.type!="stroke") {
-                            imagesToRemove[imagesToRemove.length] = doc.value.src
-                            console.log("---->>>>>>>" + doc.value.src)
-                        }
-                        removeDoc(doc.value._id,doc.value._rev)
+        if(data==1){
+            console.log("UPDATING PREVIEW")
+            var def = deleteMedias()
+            var canvas = document.getElementById("canvas");
+            var img64 = canvas.toDataURL("image/png");
+            def.done(function(d){
+                $.each(d.rows,function(i,doc){
+                    if(doc.value.type!="stroke") {
+                        imagesToRemove[imagesToRemove.length] = doc.value.src
+                        console.log("---->>>>>>>" + doc.value.src)
+                    }
+                    removeDoc(doc.value._id,doc.value._rev)
 
 
-                    })
-                    console.log("Borrado completo<<<<")
-                    console.log(imagesToRemove)
-                    $.ajax({
-                        type: "POST",
-                        url: "uploadPreview",
-                        data: {
-                            img64: img64,
-                            canvas_id: canvas_id,
-                            images:imagesToRemove
-                        },
-                        success: function(data) {
-                            console.log("SUCCESS uploadPreview: "+data);
-
-                        },
-                        error: function(xhr, status, error) {
-                            var err = eval(xhr.responseText);
-                            console.log(err.Message);
-                        }
-
-                    }).done(function(img){
-                            console.log("GUARDANDO")
-                            var date = Math.round(new Date().getTime()/1000)
-                            var doc = {"canvas_id": canvas_id,"created_at":date, "type": "background","src":img}
-                            saveDoc(doc)
-                    })
                 })
+                console.log("Borrado completo<<<<")
+                console.log(imagesToRemove)
+                $.ajax({
+                    type: "POST",
+                    url: "uploadPreview",
+                    data: {
+                        img64: img64,
+                        canvas_id: canvas_id,
+                        images:imagesToRemove
+                    },
+                    success: function(data) {
+                        console.log("SUCCESS uploadPreview: "+data);
 
-                resetInterval()
-            }
-        })
+                    },
+                    error: function(xhr, status, error) {
+                        var err = eval(xhr.responseText);
+                        console.log(err.Message);
+                    }
+
+                }).done(function(img){
+                    console.log("GUARDANDO")
+                    var date = Math.round(new Date().getTime()/1000)
+                    var doc = {"canvas_id": canvas_id,"created_at":date, "type": "background","src":img}
+                    saveDoc(doc)
+                })
+            })
+
+            resetInterval()
+        }
+    })
 
 }
 
@@ -282,40 +283,40 @@ function saveImgCanvas(div){
  */
 function setMedia(rows,i){
 
-        var m = rows[i].value
+    var m = rows[i].value
 
-        console.log(m)
-        if (m.type == "stroke") {
-            setStroke(m)
+    console.log(m)
+    if (m.type == "stroke") {
+        setStroke(m)
+        if(i+1<rows.length)
+            setMedia(rows,i+1)
+    }
+    else if (m.type == "img") {
+        var base_image = new Image();
+        base_image.src = "/socialnet/public/canvasimg/" + m.src
+        base_image.onload = function () {
+            if(m.angle!=0){
+                setImg(base_image, m.x, m.y, m.angle)
+                console.log("drawing on: x:"+ m.x+", y:"+m.y+", angle:"+ m.angle)
+            }
+            else
+                ctx.drawImage(base_image, m.x, m.y);
             if(i+1<rows.length)
                 setMedia(rows,i+1)
-        }
-        else if (m.type == "img") {
-            var base_image = new Image();
-            base_image.src = "/socialnet/public/canvasimg/" + m.src
-            base_image.onload = function () {
-                if(m.angle!=0){
-                    setImg(base_image, m.x, m.y, m.angle)
-                    console.log("drawing on: x:"+ m.x+", y:"+m.y+", angle:"+ m.angle)
-                }
-                else
-                    ctx.drawImage(base_image, m.x, m.y);
-                if(i+1<rows.length)
-                    setMedia(rows,i+1)
 
-            }
         }
-        else if(m.type == "background"){
-            var canvas = document.getElementById("canvas");
-            var base_image = new Image();
-            base_image.onload = function () {
-                ctx.drawImage(base_image, 0, 0, canvas.width, canvas.height);
-                if(i+1<rows.length)
-                    setMedia(rows,i+1)
+    }
+    else if(m.type == "background"){
+        var canvas = document.getElementById("canvas");
+        var base_image = new Image();
+        base_image.onload = function () {
+            ctx.drawImage(base_image, 0, 0, canvas.width, canvas.height);
+            if(i+1<rows.length)
+                setMedia(rows,i+1)
 
-            };
-            base_image.src = "/socialnet/public/canvasimg/"+m.src;
-        }
+        };
+        base_image.src = "/socialnet/public/canvasimg/"+m.src;
+    }
 }
 
 
@@ -524,7 +525,7 @@ function newCanvas(){
 }
 
 /**
- *INTENTAR GUARDAR EL PREVIUW CON EL CANVAS ACTUAL
+ *INTENTAR GUARDAR EL PREVIEW CON EL CANVAS ACTUAL
  */
 function selectColor(el){
     for(var i=0;i<document.getElementsByClassName("palette").length;i++){
@@ -589,15 +590,15 @@ var drawMouse = function() {
     var i = 0;
     var clicked = 0;
     var start = function(e) {
-            console.log("START MOUSE")
-            clicked = 1;
+        console.log("START MOUSE")
+        clicked = 1;
 
-            x = e.pageX - offx;
-            y = e.pageY - offy;
-            ctx.moveTo(x, y);
-            ctx.beginPath();
-            xs[i] = x;
-            ys[i++] = y;
+        x = e.pageX - offx;
+        y = e.pageY - offy;
+        ctx.moveTo(x, y);
+        ctx.beginPath();
+        xs[i] = x;
+        ys[i++] = y;
     };
     var move = function(e) {
         console.log("MOVIENDO MOUSE")
@@ -648,12 +649,3 @@ var drawMouse = function() {
     document.getElementById("canvas").addEventListener("mousemove", move, false);
     document.addEventListener("mouseup", stop, false);
 };
-
-
-
-
-
-
-
-
-
