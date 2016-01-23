@@ -6,6 +6,7 @@ use App\User;
 use Validator;
 use Input;
 use File;
+use App\Friend;
 class UsersController extends Controller {
 
   public function login(Request $request) { //VALIDAR EL LOGIN
@@ -44,7 +45,7 @@ class UsersController extends Controller {
 
     }
 
-    public function getProfile2(Request $request){
+    public function getProfile2(Request $request){//Para editar el perfil
         $user=$request->session()->get('user_obj');
         $photo=$user->photo;
         if($photo==""){
@@ -57,19 +58,24 @@ class UsersController extends Controller {
 
     }
 
-    public function getProfile3($id){
+    public function getProfile3($id,Request $request){//Para el perfil del amigo
+        $u=$request->session()->get('user_obj');
         $user=User::getUserById($id);
-        //echo $user->get(0)->name;
         if($user->get(0)->photo==""){
             $photo="noimg.png";
         }else{
             $photo=$user->get(0)->photo;
         }
+        //PAra ver si son amigos o no
+        $idUser=$u->idUser;
+        $friend=Friend::viewFriend($id,$idUser);
+
        return view('friendProfile', ['name' => $user->get(0)->name,
             'photo'=>$photo,
             'birthdate'=>$user->get(0)->birthDate,
-            'email'=>$user->get(0)->email]);
-
+            'email'=>$user->get(0)->email,
+           'idUser'=>$user->get(0)->idUser,
+            'friend'=>$friend]);
     }
 
 

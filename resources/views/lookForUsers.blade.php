@@ -50,10 +50,15 @@
         <label>Resultado de la búsqueda:</label><br>
         @if (count($users)>0)
             @foreach ($users as $p)
-             <p><a href="friendProfile/{{ $p->idUser}}">{{ $p->name }}</a></p>
+             <p><a href="friendProfile/{{ $p->idUser}}">{{ $p->name }}</a>
+            @if (!in_array($p->idUser,$friend))
                 <div>
-                    <a href="addFriend/{{ $p->idUser}}"><button>Enviar peticion de amistad</button></a>
+                    <a href="sendFriend3/{{ $p->idUser}}"><button>Enviar peticion de amistad</button></a>
                 </div>
+                @else
+                    <span> Ya soys amigos</span>
+                @endif
+                </p>
             @endforeach
         @else
 

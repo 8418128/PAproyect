@@ -78,23 +78,73 @@ public function send($friendId, Request $request){
     return redirect('search2');
 
 }
+
+    public function send2($friendId, Request $request){
+        $user=$request->session()->get('user_obj')->idUser;
+        $sendUser=new Friend();
+        $sendUser->user=$user;
+        $sendUser->friend=$friendId;
+        $sendUser->status=0;
+        $sendUser->action_user=1;//Envia la peticion
+        $sendUser->save();
+
+        $friend=new Friend();
+        $friend->user=$friendId;
+        $friend->friend=$user;
+        $friend->status=0;
+        $friend->action_user=0;//Quien recive la peticion
+        $friend->save();
+
+        return redirect()->back()->with('id',$friendId);
+
+    }
+
+
+    public function send3($friendId, Request $request){
+        $user=$request->session()->get('user_obj')->idUser;
+        $sendUser=new Friend();
+        $sendUser->user=$user;
+        $sendUser->friend=$friendId;
+        $sendUser->status=0;
+        $sendUser->action_user=1;//Envia la peticion
+        $sendUser->save();
+
+        $friend=new Friend();
+        $friend->user=$friendId;
+        $friend->friend=$user;
+        $friend->status=0;
+        $friend->action_user=0;//Quien recive la peticion
+        $friend->save();
+
+        return redirect('search2');
+
+    }
+
+
+
     public function lookFor(Request $request){
        /* $name=$request->input('buscar');
         return User::findByUserName($name);*/
         $name = $request->input('name');
-
+        $userId=$request->session()->get('user_obj')->idUser;
 //var_dump( User::findByUserName($name));
        //return response()->json(['users'=> User::findByUserName($name)]);
         $us=[];
         if($name!=''){
             $users=User::findByUserName($name);
-
+            $friendok=[];
             foreach($users as $u){
-                $us[]=$u;
+               if($u->idUser != $userId){
+                   if(Friend::viewFriend($u->idUser,$userId)){
+                        $friendok[]=$u->idUser;
+                   }
+                   $us[]=$u;
+               }
+
 
             }
         }
-        return view('lookForUsers', ['users' => $us]);
+       return view('lookForUsers', ['users' => $us,'friend'=>$friendok]);
 
 
     }
@@ -121,6 +171,17 @@ public function send($friendId, Request $request){
         Friend::getFriendsDelete($friendId,$user);
 
         return redirect('search2');
+
+
+    }
+
+    public function declined2($friendId, Request $request){
+        $user=$request->session()->get('user_obj')->idUser;
+        Friend::getFriendsDelete($user,$friendId);
+        Friend::getFriendsDelete($friendId,$user);
+
+      //  return redirect('friendProfile');
+        return redirect()->back()->with('id',$friendId);
 
 
     }

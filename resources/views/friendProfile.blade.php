@@ -40,6 +40,11 @@
     <p>Name: {{$name}}</p>
     <p>Date of birth: {{$birthdate}}</p>
     <p>Email: {{$email}}</p>
+    @if($friend)
+        <a href="/socialnet/public/declinedFriend2/{{ $idUser}}"><button>Eliminar amigo</button></a>
+        @else
+        <a href="/socialnet/public/sendFriend2/{{ $idUser}}"><button>Enviar peticion de amistad</button></a>
+    @endif
 
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

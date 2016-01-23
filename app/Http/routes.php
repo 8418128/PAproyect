@@ -34,10 +34,13 @@ Route::get('/editProfile','UsersController@getProfile2');
 Route::post('/updateProfile','UsersController@update');
 Route::get('friendProfile/{id}','UsersController@getProfile3');
 Route::get('sendFriend/{id}','FriendsController@send');
+Route::get('sendFriend2/{id}','FriendsController@send2');
+Route::get('sendFriend3/{id}','FriendsController@send3');
 Route::get('search2','FriendsController@getPeticiones');
 Route::post('lookFor','FriendsController@lookFor');
 Route::get('addFriend/{id}','FriendsController@add');
 Route::get('declinedFriend/{id}','FriendsController@declined');
+Route::get('declinedFriend2/{id}','FriendsController@declined2');
 
 Route::get('/broadcast/{channel}', function($channel) {
     return view('welcome')->with('channel',$channel);
