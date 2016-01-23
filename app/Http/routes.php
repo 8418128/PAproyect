@@ -44,3 +44,8 @@ Route::get('/profile','UsersController@getProfile');
 
 Route::get('/edit','UsersController@getProfile');
 Route::post('/saveProfile','UsersController@update');
+
+Route::get('chats','ChatController@getChatFromFriend');
+Route::get('/chaty', function () {
+    return view('chatView');
+});
