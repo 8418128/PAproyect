@@ -39,9 +39,6 @@ Route::post('lookFor','FriendsController@lookFor');
 Route::get('addFriend/{id}','FriendsController@add');
 Route::get('declinedFriend/{id}','FriendsController@declined');
 
-
-
-
 Route::get('/broadcast/{channel}', function($channel) {
     return view('welcome')->with('channel',$channel);
 });
