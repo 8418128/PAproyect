@@ -27,7 +27,7 @@ class User extends Model
 	}
 
 
-	static public function findByUserName($name){ //OBTENER USUARIO MEDIANTE EMAIL
+	static public function findByUserName($name){ //OBTENER USUARIO MEDIANTE NAme
 		$u = User::where('name','like', $name)->first();
 		if(!is_null($u)) {
 			return $u;

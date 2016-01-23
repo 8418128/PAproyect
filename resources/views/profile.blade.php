@@ -37,8 +37,7 @@
 <div class = "container">
 
         <img src="generalImg/{{$photo}}" width="100px">
-       <p>First name: {{$name}}</p>
-        <p>Last name: {{$surname}}</p>
+       <p>Name: {{$name}}</p>
        <p>Date of birth: {{$birthdate}}</p>
         <p>Email: {{$email}}</p>
 

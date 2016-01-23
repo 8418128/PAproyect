@@ -4,6 +4,8 @@
 
         <link href="{{asset('style/editProfile.css')}}" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="style\menu.css">
+        <script type="text/javascript" src="{{asset('generalJs/buscador.js')}}"></script>
+        <script src="http://js.pusher.com/3.0/pusher.min.js"></script>
     </head>
     <body>
     <header>
@@ -20,7 +22,7 @@
             <li><a href="#">Atelier</a></li>
             <li><a href="home">Home</a></li>
             <li><a href="search">Buscar amigos</a></li>
-            <li><a href="/socialnet/public/myProfile">My Profile</a></li>
+            <li><a href="myProfile">My Profile</a></li>
         </ul>
     </div>
     <div class="menu" id = "menu2">
@@ -33,10 +35,12 @@
     <div id="contenido">
         <div>
             <p>Buscador</p>
-            <form method="post" action="lookFor">
-                <input type="text" name="buscar">
-                <input type="submit" value="buscar">
-            </form>
+          <!--  <form method="post" action="#">
+                <input type="text" name="buscar" id="name">
+                <input type="submit" value="buscar" id="buscador">
+            </form>-->
+            <input type="text" name="buscar" id="name">
+            <button id="buscador" onclick="load()">Buscar</button>
 
 
         </div>

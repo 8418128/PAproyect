@@ -38,7 +38,6 @@ class UsersController extends Controller {
             $photo = "noimg.png";
         }
         return view('profile', ['name' => $user->name,
-            'surname'=>$user->surname,
             'photo'=>$photo,
             'birthdate'=>$user->birthDate,
             'email'=>$user->email]);
@@ -52,7 +51,6 @@ class UsersController extends Controller {
             $photo="noimg.png";
         }
         return view('editProfile', ['name' => $user->name,
-            'surname'=>$user->surname,
             'photo'=>$photo,
             'birthdate'=>$user->birthDate,
             'email'=>$user->email]);
@@ -68,7 +66,6 @@ class UsersController extends Controller {
             $photo=$user->get(0)->photo;
         }
        return view('friendProfile', ['name' => $user->get(0)->name,
-            'surname'=>$user->get(0)->surname,
             'photo'=>$photo,
             'birthdate'=>$user->get(0)->birthDate,
             'email'=>$user->get(0)->email]);
@@ -80,7 +77,6 @@ class UsersController extends Controller {
     {
         $rules = array(
             'name' => 'required',
-            'surname' => 'required',
             'birthDate' => 'required',
             'password' => 'required',
             'confirm_password' => 'required',
@@ -98,7 +94,6 @@ class UsersController extends Controller {
 
 
         $name = $request->input("name");
-        $surname = $request->input("surname");
 
         $birthdate = $request->input("birthDate");
         if(!preg_match('/^([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})$/',$birthdate)){
@@ -115,7 +110,6 @@ class UsersController extends Controller {
         $new_user->password=Hash::make($password);
         $new_user->email=$email;
         $new_user->name=$name;
-        $new_user->surname=$surname;
         $new_user->birthDate=$birthdate;
 
         if(!is_null($photo)){
@@ -150,11 +144,8 @@ class UsersController extends Controller {
 
         $user_old = $request->session()->get('user_obj');
 
-
-
         $rules = array(
             'name' => 'required',
-            'surname' => 'required',
             'birthdate' => 'required',
             'email' => 'required|email',
 
@@ -193,7 +184,6 @@ class UsersController extends Controller {
 
         }
         $user_old->name=$request->input("name");
-        $user_old->surname=$request->input("surname");
         $user_old->birthDate=$request->input("birthdate");
         $user_old->email=$request->input("email");
 

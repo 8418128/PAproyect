@@ -79,8 +79,15 @@ public function send($friendId, Request $request){
 
 }
     public function lookFor(Request $request){
-        $name=$request->input('buscar');
-        return User::findByUserName($name);
+       /* $name=$request->input('buscar');
+        return User::findByUserName($name);*/
+        $name = $request->input('name');
+        $total=User::findByUserName($name);
+        foreach($total as $u){
+         $users[]=$u;
+
+        }
+       return response()->json(['users'=>$users]);
 
 
 
