@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use DB;
 //table USERS
 class User extends Model
 {
@@ -28,7 +29,9 @@ class User extends Model
 
 
 	static public function findByUserName($name){ //OBTENER USUARIO MEDIANTE NAme
-		$u = User::where('name','like', $name)->first();
+		//DB::enableQueryLog();
+		$u = User::where('name','like', '%'.$name.'%')->get();
+		//dd(DB::getQueryLog());
 		if(!is_null($u)) {
 			return $u;
 		}

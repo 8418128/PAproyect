@@ -36,7 +36,6 @@ Route::get('friendProfile/{id}','UsersController@getProfile3');
 Route::get('sendFriend/{id}','FriendsController@send');
 Route::get('search2','FriendsController@getPeticiones');
 Route::post('lookFor','FriendsController@lookFor');
-Route::get('lookFor','FriendsController@lookFor');
 Route::get('addFriend/{id}','FriendsController@add');
 Route::get('declinedFriend/{id}','FriendsController@declined');
 

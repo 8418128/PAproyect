@@ -39,8 +39,12 @@
                 <input type="text" name="buscar" id="name">
                 <input type="submit" value="buscar" id="buscador">
             </form>-->
-            <input type="text" name="buscar" id="name">
-            <button id="buscador" onclick="load()">Buscar</button>
+          <!--  <input type="text" name="buscar" id="name">
+            <button id="buscador" onclick="load()">Buscar</button>-->
+            <form action="lookFor" method="post">
+                <input type="text" name="name">
+                <input type="submit" value="Buscar">
+            </form>
 
 
         </div>

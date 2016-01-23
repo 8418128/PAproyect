@@ -82,14 +82,17 @@ public function send($friendId, Request $request){
        /* $name=$request->input('buscar');
         return User::findByUserName($name);*/
         $name = $request->input('name');
-        $total=User::findByUserName($name);
-        foreach($total as $u){
-         $users[]=$u;
+
+//var_dump( User::findByUserName($name));
+       //return response()->json(['users'=> User::findByUserName($name)]);
+        $users=User::findByUserName($name);
+        $us=[];
+        foreach($users as $u){
+            $us[]=$u;
 
         }
-       return response()->json(['users'=>$users]);
 
-
+         return view('lookForUsers', ['users' => $us]);
 
     }
 

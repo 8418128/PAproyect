@@ -10,14 +10,14 @@ function load() {
                     console.log("SUCCESS busqueda: " + data);
 
                 },
-                error: function (xhr, status, error) {
-                    var err = eval(xhr.responseText);
-                    console.log(err.Message);
-                }
 
-            }).done(function (users) {//Aqui llega el array de la busqueda
-                alert(users);
-            })
+            }).done(function (data) {//Aqui llega el array de la busqueda
+                console.log("Resultado: " + data['users']);
+
+              $.each(data.users,function(i,user) {
+                    console.log('Prueba '+ user.name);
+                });
+
+            });
         }
-
 }
