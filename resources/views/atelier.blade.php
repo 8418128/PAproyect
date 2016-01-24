@@ -12,14 +12,15 @@
     <!-- hamburger menu: http://codepen.io/g13nn/pen/eHGEF -->
     <button class="hamburger">&#9776;</button>
     <button class="cross">&#735;</button>
-    My Search Friend
+    My Atelier
     <button class="friends"><img src="style/group_contact-512.png"></button>
     <button class="cross2">&#735;</button>
 </header>
 <div class="menu" id = "menu1">
     <ul>
         <li><a href="#">Gallery</a></li>
-        <li><a href="#">Atelier</a></li>
+        <li><a href="canva">Created</a></li>
+        <li><a href="atelier">Atelier</a></li>
         <li><a href="home">Home</a></li>
         <li><a href="search">Buscar amigos</a></li>
         <li><a href="myProfile">My Profile</a></li>
@@ -34,35 +35,14 @@
 </div>
 <div id="contenido">
     <div>
-        <p>Buscador</p>
-        <!--  <form method="post" action="#">
-              <input type="text" name="buscar" id="name">
-              <input type="submit" value="buscar" id="buscador">
-          </form>-->
-        <!--  <input type="text" name="buscar" id="name">
-          <button id="buscador" onclick="load()">Buscar</button>-->
-        <form action="lookFor" method="post">
-            <input type="text" name="name">
-            <input type="submit" value="Buscar">
-        </form>
-    </div>
-    <div >
         <label>Resultado de la búsqueda:</label><br>
-        @if (count($users)>0)
-            @foreach ($users as $p)
-             <p><a href="friendProfile/{{ $p->idUser}}">{{ $p->name }}</a></p>
-            @if (!in_array($p->idUser,$friend))
-                <div>
-                    <a href="sendFriend3/{{ $p->idUser}}"><button>Enviar peticion de amistad</button></a>
-                </div>
-                @else
-                    <span> Ya soys amigos</span>
-                @endif
-
+        @if (count($canvas)>0)
+            @foreach ($canvas as $p)
+                <p><a href="friendProfile/{{ $p->idCanvas}}">{{ $p->preview }}</a></p>
             @endforeach
         @else
 
-            <p>No hay coincidencias.</p>
+            <p>No tienes aún un painting.</p>
         @endif
     </div>
 </div>

@@ -52,6 +52,8 @@ Route::get('lastmod', 'CanvasController@lastmod');
 Route::post('uploadPreview', 'CanvasController@savePreview');
 Route::get('uploadPreview', 'CanvasController@savePreview');
 
+Route::get('atelier','CanvasController@viewMyPreview');
+
 
 Route::get('register', function () {
     return view('register_snippet');
