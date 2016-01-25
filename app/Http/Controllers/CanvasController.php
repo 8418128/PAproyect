@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use File;
 use App\Canvas;
 use Illuminate\Http\Request;
-class CanvasController extends Controller
+class CanvasController extends Controller implements Pusheable
 {
 
     function gallery(Request $request){
@@ -41,11 +41,6 @@ class CanvasController extends Controller
     /**
      *PUSHEAR EVENTO
      */
-    function push(Request $request){
-        $json = $request->input('doc');
-        event(new \App\Events\ChEvent($json['canvas_id'],$json));
-        return "OKK-->";
-    }
 
 
     /**
@@ -244,6 +239,7 @@ class CanvasController extends Controller
 
     }
 
+<<<<<<< HEAD
     function viewMyPainting(Request $request){//Obtengo los canvas del usuario
         $idUser=$request->session()->get('user_obj')->idUser;
         $painting=Painting::viewMyPainting($idUser);
@@ -257,4 +253,12 @@ class CanvasController extends Controller
 
 
 
+=======
+    function push(Request $request)
+    {
+        $json = $request->input('doc');
+        event(new \App\Events\ChEvent($json['canvas_id'],$json));
+        return "OKK-->";
+    }
+>>>>>>> pa/masterr
 }

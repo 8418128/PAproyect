@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Chat;
 use App\User;
 
-class ChatController extends Controller
+class ChatController extends Controller implements Pusheable
 {
     public function getChatFromFriend(Request $request){
         $user = $request->session()->get('user_obj');
@@ -20,9 +20,21 @@ class ChatController extends Controller
 
         $person = ['me' => User::find($user->idUser), 'he' => $friend];
 
-        //return json_encode($chats);
         return response()->json(['chats' => $chats, 'person' => $person]);
 
+    }
+
+    function push(Request $request)
+    {
+
+        $json = $request->input('chat');
+        $newChat = new Chat();
+        $newChat->sends=$json['sends'];
+        $newChat->receives=$json['receives'];
+        $newChat->text=$json['text'];
+        $newChat->save();
+        event(new \App\Events\ChEvent($json['receives'],$json));
+        return "OKK-->";
     }
 }
 

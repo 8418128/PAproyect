@@ -1,19 +1,67 @@
 /**
  * Created by S on 17/01/2016.
  */
-var friend = 10
 var route = '/socialnet/public/generalImg/'
-var me,he;
+var me = {idUser:9};
+var openedChats = {};
+var hes = {};
 $(function(){
+    listenPusher(me)
+    $(document).on('click', '.glyphicon-comment', function (e) {
+        var chatid = $(this).attr('id')
+        chatid = parseInt(chatid.split('chat')[1]);
+        console.log(openedChats[chatid])
+        if(openedChats[chatid]!=undefined&&!openedChats[chatid].is(":visible")){
+            $(".chat-window").hide()
+            $('#chats-container').find('.btn-xs').removeClass('active')
+            openedChats[chatid].show()
+            $("#minic"+chatid).addClass('active')
+        }
+        else if(openedChats[chatid]==undefined){
+            $(".chat-window").hide()
+            openedChats[chatid]=appendChat(chatid,false)
+
+        }
+
+    })
+
+    $('#chats-container').on('click', '.btn-xs', function () {
+        var chatid = $(this).attr('id').split("minic")[1]
+        console.log(chatid)
+        if(!openedChats[chatid].is(":visible")){
+            $(".chat-window").hide()
+            $('#chats-container').find('.btn-xs').removeClass('active')
+            openedChats[chatid].show()
+            $("#minic"+chatid).addClass('active')
+            $('#minic' + chatid).removeClass('parpadea')
+            goBottom($('#chat_window'+chatid))
+        }
+        else if(openedChats[chatid].is(":visible")){
+            openedChats[chatid].hide()
+            $('#chats-container').find('.btn-xs').removeClass('active')
+
+        }
+    });
+
+
+})
+
+
+
+
+
+function appendChat(id_he,flag){
+    var he;
+    var chatn='chat_window'+id_he
 
     var chaty = '<div class="row chat-window col-xs-5 col-md-3" ' +
-        'id="chat_window_1" style="margin-left:10px;">' +
+        'id="'+chatn+'" style="margin-left:10px;">' +
         '<div class="col-xs-12 col-md-12">       ' +
         '<div class="panel panel-default">      ' +
         '<div class="panel-heading top-bar">       ' +
         '<div class="col-md-8 col-xs-8">       ' +
         '<h3 id="chatPerson" class="panel-title">' +
-        '<div id="isCon"></div></h3>        ' +
+        '<div id="isCon"> </div></h3>        ' +
         '</div>        ' +
         '<div class="col-md-4 col-xs-4" style="text-align: right;">        ' +
         '<a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>        ' +
@@ -25,64 +73,11 @@ $(function(){
         '</span>        </div>        </div>        </div>        </div>       </div>'
 
     $('body').append(chaty)
+    var selectChat = $('#'+chatn)
 
-
-    $.ajax({
-        type: "GET",
-        url: "chats",
-        data: {
-            friend:friend
-        },
-        success: function(data) {
-            console.log("SUCCESS: ");
-
-        },
-        error: function(xhr, status, error) {
-            var err = eval(xhr.responseText);
-            console.log(err.Message);
-        }
-
-    }).done(function(data){
-        var panel = $("#panelChat")
-        he=data.person.he
-        me=data.person.me
-        $("#chatPerson").append(" <span style='cursor:pointer;' id='linkF'>"+he['name']+"</span>")
-
-        $("#isCon").css('background-color', '#2ECC40');
-        friendLink()
-        $.each(data.chats,function(i,chat){
-            console.log(chat)
-            if (chat.sends == friend) {
-                console.log("receive->"+chat.sends)
-                panel.append(setReceive(chat))
-            }
-            else {
-                console.log("sent->"+chat.sends)
-                panel.append(setSent(chat))
-            }
-        })
-    })
-
-
-
-    $("#btn-input").keyup(function (e) {
-        if (e.keyCode == 13) {
-            send()
-        }
-    });
-
-    $('#panelChat').scroll(function() {
-        if($(this).scrollTop()  == 0) {
-            console.log("top")
-        }
-    });
-
-
-    $(document).on('click', '#btn-chat', function (e) {
-        send()
-    })
-
-    $(document).on('click', '.panel-heading span.icon_minim', function (e) {
+    var collapse = selectChat.find('.panel-heading span.icon_minim')
+    collapse.click(function() {
+        console.log("MORE MINUS")
         var $this = $(this);
         if (!$this.hasClass('panel-collapsed')) {
             $this.parents('.panel').find('.panel-body').slideUp();
@@ -94,46 +89,187 @@ $(function(){
             $this.removeClass('glyphicon-plus').addClass('glyphicon-minus');
         }
     });
-    $(document).on('focus', '.panel-footer input.chat_input', function (e) {
+
+    var foot = selectChat.find('.panel-footer input.chat_input')
+    foot.click(function() {
+        console.log("MINUS MORE")
         var $this = $(this);
         if ($('#minim_chat_window').hasClass('panel-collapsed')) {
             $this.parents('.panel').find('.panel-body').slideDown();
             $('#minim_chat_window').removeClass('panel-collapsed');
             $('#minim_chat_window').removeClass('glyphicon-plus').addClass('glyphicon-minus');
         }
-    });
-    $(document).on('click', '#new_chat', function (e) {
-        var size = $( ".chat-window:last-child" ).css("margin-left");
-        size_total = parseInt(size) + 400;
-        alert(size_total);
-        var clone = $( "#chat_window_1" ).clone().appendTo( ".container" );
-        clone.css("margin-left", size_total);
-    });
-    $(document).on('click', '.icon_close', function (e) {
-        //$(this).parent().parent().parent().parent().remove();
-        $( "#chat_window_1" ).remove();
-    });
-})
+        });
 
-function send(){
-    var txt = $("#btn-input").val()
-    var chat = {text:txt,updated_at:0}
-    $("#panelChat").append(setSent(chat))
-    $("#btn-input").val('')
-    $('#panelChat').animate({
-        scrollTop: $(".msg_container").last().offset().top
-    }, 300);
-    //TODO mandar el evento de chat
+
+    var remv = selectChat.find('.icon_close')
+    remv.click(function() {
+        console.log("REMOVE")
+        //$(this).parent().parent().parent().parent().remove();
+        $( "#"+chatn).remove();
+        delete hes[id_he]
+        delete openedChats[id_he]
+        console.log(hes)
+        $("#minic"+id_he).remove();
+        });
+
+    $.ajax({
+        type: "GET",
+        url: "chats",
+        data: {
+            friend:id_he
+        },
+        success: function(data) {
+            console.log("SUCCESS: ");
+
+        },
+        error: function(xhr, status, error) {
+            var err = eval(xhr.responseText);
+            console.log(err.Message);
+        }
+
+    }).done(function(data){
+        console.log(data)
+        he=data.person.he
+        hes[he['idUser']]=he
+        me=data.person.me
+        var panel = selectChat.find('#panelChat')
+        var cPerson = selectChat.find('#chatPerson')
+        cPerson.append(" <span style='cursor:pointer;' id='linkF'>"+he['name']+"</span>")
+        if(he.connected==1){
+            selectChat.find('#isCon').removeClass('disconn')
+            selectChat.find('#isCon').addClass('conn');
+        }
+        else{
+            selectChat.find('#isCon').removeClass('conn')
+            selectChat.find('#isCon').addClass('disconn');
+        }
+        friendLink(he)
+        $.each(data.chats,function(i,chat){
+            if (chat.sends == id_he) {
+                panel.append(setReceive(chat,he))
+            }
+            else {
+                panel.append(setSent(chat))
+            }
+        })
+
+        goBottom(selectChat)
+
+
+
+        selectChat.find('#btn-input').keyup(function (e) {
+            if (e.keyCode == 13) {
+                console.log("SEND ENTER")
+                send(he,selectChat)
+            }
+        });
+
+        selectChat.find('#btn-chat').click(function (e) {
+            console.log("SEND CLICK")
+            send(he,selectChat)
+        })
+
+        $('#chats-container').find('.btn-xs').removeClass('active')
+        appendMiniChat(id_he)
+        if(flag) {
+            $('#minic' + id_he).removeClass('active')
+            $('#minic' + id_he).addClass('parpadea')
+        }
+        else
+            $("#minic"+id_he).addClass('active')
+
+
+    })
+
+    selectChat.find('#panelChat').scroll(function() {
+        if($(this).scrollTop()  == 0) {
+            console.log("top")
+        }
+    });
+
+    return selectChat;
+
 }
 
-function friendLink(){
-    $(document).on('click', '#linkF', function (e) {
-        //TODO mandar al perfil del colega
-        console.log(he.idUser)
+
+function listenPusher(me){
+
+    Pusher.log = function(msg) {
+        console.log(msg)
+    };
+    var pusher = new Pusher("650badadf8611ff0c889")
+    var channel = pusher.subscribe(me.idUser.toString());
+    channel.bind('App\\Events\\ChEvent',
+        function(data) {
+            console.log("-.-.-.-.-.")
+            console.log(data)
+            var msg = data.texto.text
+            var sends = data.texto.sends
+            var chatn=$('#chat_window'+sends)
+            var chat = {text:msg,updated_at:0}
+            if(chatn.length>0){
+                console.log("1")
+                chatn.find('#panelChat').append(setReceive(chat,hes[sends]))
+                $('#minic'+sends).addClass('parpadea')
+
+            }
+            else{
+                console.log("2")
+                openedChats[sends]=appendChat(sends,true)
+                $('#chat_window'+sends).hide();
+                console.log($('#minic'+sends))
+            }
+
+        }
+    );
+}
+
+
+
+function appendMiniChat(sends){
+    console.log('apendoChato')
+    var he = hes[sends]
+    var con;
+    if(he['connected']==1)
+        con = '<div class="conn"></div>'
+    else{
+        con = '<div class="disconn"></div>'
+    }
+    $("#chats-container").append('<button type="button" id="minic'+sends+'" class="btn btn-default btn-xs"><div id="pp">'+con+he['name']+'</div></button>')
+
+}
+
+function goBottom(selectChat){
+    /*var top = selectChat.find(".msg_container").last().offset().top
+    selectChat.find('#panelChat').animate({
+        scrollTop: top
+    }, 300);*/
+}
+
+function send(he,selectChat){
+    var txt = selectChat.find("#btn-input").val()
+    var chat = {text:txt,updated_at:0}
+    selectChat.find("#panelChat").append(setSent(chat))
+    $.ajax({
+        type: "POST",
+        url: "pushChat",
+        data: {
+            chat: {sends:me.idUser,receives:he.idUser,text:txt}
+        }
+    }).done(function(){
+        selectChat.find("#btn-input").val('')
+        goBottom(selectChat)
     })
 }
 
-function setReceive(chat){
+function friendLink(he){
+    $(document).on('click', '#linkF', function (e) {
+        window.location='/socialnet/public/friendProfile/'+he.idUser
+    })
+}
+
+function setReceive(chat,he){
     var msg = chat.text
     var user = he.name
     var time = chat.updated_at
