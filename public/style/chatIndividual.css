@@ -1,8 +1,15 @@
-body{
-    height:400px;
-    position: fixed;
-    bottom: 0;
+#chats-container{
+    background-color: #5bc0de;
+    color:white;
+    position:fixed;
+    bottom:0;
+    height:25px;
+    width:100%;
+    padding-top:1px;
+    padding-left:1px;
 }
+
+
 .col-md-2, .col-md-10{
     padding:0;
 }
@@ -10,7 +17,7 @@ body{
     margin-bottom: 0px;
 }
 .chat-window{
-    bottom:0;
+    bottom:25px;
     position:fixed;
     float:right;
     margin-left:10px;
@@ -134,9 +141,50 @@ img {
     cursor:pointer;
 }
 
-#isCon{
+.conn,.disconn{
+    margin-top:2px;
+    float:left;
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 12px;
+    height: 12px;
+    margin-right:3px;
+}
+
+.conn{
     background-color: #2ECC40;
+}
+.disconn{
+    background-color: #d1d1d1;
+}
+
+
+.parpadea {
+
+    animation-name: parpadeo;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+
+    -webkit-animation-name:parpadeo;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes parpadeo{
+    0% { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1.0; }
+}
+
+@-webkit-keyframes parpadeo {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1.0; }
+}
+
+@keyframes parpadeo {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1.0; }
 }

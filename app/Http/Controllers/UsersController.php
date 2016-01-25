@@ -15,6 +15,8 @@ class UsersController extends Controller {
 
     $user_obj = User::findByUserPass($email,$password);
     if ( !is_null($user_obj) ) {
+        $user_obj->connected=1;
+        $user_obj->save();
         $request->session()->put('user_obj', $user_obj);
         $prev_path = $request->cookie('prev_path');
         if(!is_null($prev_path)){
