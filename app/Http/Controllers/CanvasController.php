@@ -251,6 +251,7 @@ class CanvasController extends Controller implements Pusheable
         return view('gallery', ['painting' => $c,'idUserSession'=>$idUser]);
     }
 
+
     function push(Request $request)
     {
         $json = $request->input('doc');
