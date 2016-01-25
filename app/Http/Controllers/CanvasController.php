@@ -239,7 +239,7 @@ class CanvasController extends Controller implements Pusheable
 
     }
 
-<<<<<<< HEAD
+
     function viewMyPainting(Request $request){//Obtengo los canvas del usuario
         $idUser=$request->session()->get('user_obj')->idUser;
         $painting=Painting::viewMyPainting($idUser);
@@ -251,14 +251,11 @@ class CanvasController extends Controller implements Pusheable
         return view('gallery', ['painting' => $c,'idUserSession'=>$idUser]);
     }
 
-
-
-=======
     function push(Request $request)
     {
         $json = $request->input('doc');
         event(new \App\Events\ChEvent($json['canvas_id'],$json));
         return "OKK-->";
     }
->>>>>>> pa/masterr
+
 }
