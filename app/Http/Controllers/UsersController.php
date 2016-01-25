@@ -6,6 +6,7 @@ use App\User;
 use Validator;
 use Input;
 use File;
+use App\Friend;
 class UsersController extends Controller {
 
   public function login(Request $request) { //VALIDAR EL LOGIN
@@ -40,41 +41,43 @@ class UsersController extends Controller {
             $photo = "noimg.png";
         }
         return view('profile', ['name' => $user->name,
-            'surname'=>$user->surname,
             'photo'=>$photo,
             'birthdate'=>$user->birthDate,
             'email'=>$user->email]);
 
     }
 
-    public function getProfile2(Request $request){
+    public function getProfile2(Request $request){//Para editar el perfil
         $user=$request->session()->get('user_obj');
         $photo=$user->photo;
         if($photo==""){
             $photo="noimg.png";
         }
         return view('editProfile', ['name' => $user->name,
-            'surname'=>$user->surname,
             'photo'=>$photo,
             'birthdate'=>$user->birthDate,
             'email'=>$user->email]);
 
     }
 
-    public function getProfile3($id){
+    public function getProfile3($id,Request $request){//Para el perfil del amigo
+        $u=$request->session()->get('user_obj');
         $user=User::getUserById($id);
-        //echo $user->get(0)->name;
         if($user->get(0)->photo==""){
             $photo="noimg.png";
         }else{
             $photo=$user->get(0)->photo;
         }
+        //PAra ver si son amigos o no
+        $idUser=$u->idUser;
+        $friend=Friend::viewFriend($id,$idUser);
+
        return view('friendProfile', ['name' => $user->get(0)->name,
-            'surname'=>$user->get(0)->surname,
             'photo'=>$photo,
             'birthdate'=>$user->get(0)->birthDate,
-            'email'=>$user->get(0)->email]);
-
+            'email'=>$user->get(0)->email,
+           'idUser'=>$user->get(0)->idUser,
+            'friend'=>$friend]);
     }
 
 
@@ -82,7 +85,6 @@ class UsersController extends Controller {
     {
         $rules = array(
             'name' => 'required',
-            'surname' => 'required',
             'birthDate' => 'required',
             'password' => 'required',
             'confirm_password' => 'required',
@@ -100,7 +102,6 @@ class UsersController extends Controller {
 
 
         $name = $request->input("name");
-        $surname = $request->input("surname");
 
         $birthdate = $request->input("birthDate");
         if(!preg_match('/^([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})$/',$birthdate)){
@@ -117,7 +118,6 @@ class UsersController extends Controller {
         $new_user->password=Hash::make($password);
         $new_user->email=$email;
         $new_user->name=$name;
-        $new_user->surname=$surname;
         $new_user->birthDate=$birthdate;
 
         if(!is_null($photo)){
@@ -152,11 +152,8 @@ class UsersController extends Controller {
 
         $user_old = $request->session()->get('user_obj');
 
-
-
         $rules = array(
             'name' => 'required',
-            'surname' => 'required',
             'birthdate' => 'required',
             'email' => 'required|email',
 
@@ -195,7 +192,6 @@ class UsersController extends Controller {
 
         }
         $user_old->name=$request->input("name");
-        $user_old->surname=$request->input("surname");
         $user_old->birthDate=$request->input("birthdate");
         $user_old->email=$request->input("email");
 

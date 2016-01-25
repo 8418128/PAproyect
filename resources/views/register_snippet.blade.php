@@ -18,7 +18,6 @@
 		<form action="doReg" method="POST">
 			<input name="email" type="email" placeholder="Email" value="{{ old('email') }}">
 			<input name = "name" id = "name" type="text" placeholder="First name" value="{{ old('name') }}">
-			<input name = "surname" id = "surname" type="text" placeholder="Last name" value="{{ old('surname') }}">
 			<input name = "birthDate" id = "birthDate" type="text" placeholder="Birth date" value="{{ old('birthDate') }}">
 			<input name = "password" id = "password" type="password" placeholder="Password">
 			<input name = "confirm_password" id = "confirm_password"  class = "password" type="password" placeholder="Confirm password"><br>

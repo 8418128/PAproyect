@@ -225,6 +225,16 @@ class CanvasController extends Controller implements Pusheable
         return true;
     }
 
+    function viewMyPreview(Request $request){//Obtengo los canvas del usuario
+        $idUser=$request->session()->get('user_obj')->idUser;
+        $canvas=Canvas::viewCanvas($idUser);
+        $c=[];
+        foreach($canvas as $canva){
+            $c[]=$canva;
+        }
+        return view('atelier', ['canvas' => $c]);
+
+    }
 
     function push(Request $request)
     {

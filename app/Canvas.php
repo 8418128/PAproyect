@@ -30,4 +30,8 @@ class Canvas extends Model
     public function guests(){
         return $this->hasMany('App\Guest');
     }
+    static public function viewCanvas($id){
+        return Canvas::where('user','=',$id)->get();
+
+    }
 }

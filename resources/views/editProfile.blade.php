@@ -122,12 +122,9 @@
         </div>
         </tr>
         <tr>
-            <td>First name: </td><td><input type="text" name="name" value="{{$name}}">
+            <td>Name: </td><td><input type="text" name="name" value="{{$name}}">
 
             </td>
-        </tr>
-        <tr>
-            <td>Last name: </td><td><input type="text" name="surname" value="{{$surname}}"></td>
         </tr>
         <tr>
             <td>Date of birth: </td><td><input type="text" name="birthdate" value="{{$birthdate}}"></td>
