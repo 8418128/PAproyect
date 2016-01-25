@@ -7,6 +7,8 @@
  */
 
 namespace App\Http\Controllers;
+use App\Guest;
+use App\Painting;
 use Carbon\Carbon;
 use File;
 use App\Canvas;
@@ -230,16 +232,29 @@ class CanvasController extends Controller
         return true;
     }
 
-    function viewMyPreview(Request $request){//Obtengo los canvas del usuario
+    function viewMyCanvas(Request $request){//Obtengo los canvas del usuario
         $idUser=$request->session()->get('user_obj')->idUser;
         $canvas=Canvas::viewCanvas($idUser);
         $c=[];
         foreach($canvas as $canva){
             $c[]=$canva;
         }
-        return view('atelier', ['canvas' => $c]);
+        $canvasInvited=Guest::viewCanvasInvited($idUser);
+        return view('atelier', ['canvas' => $c,'idUserSession'=>$idUser,'invited'=>$canvasInvited]);
 
     }
+
+    function viewMyPainting(Request $request){//Obtengo los canvas del usuario
+        $idUser=$request->session()->get('user_obj')->idUser;
+        $painting=Painting::viewMyPainting($idUser);
+        $c=[];
+        foreach($painting as $paint){
+            $c[]=$paint;
+        }
+
+        return view('gallery', ['painting' => $c,'idUserSession'=>$idUser]);
+    }
+
 
 
 }

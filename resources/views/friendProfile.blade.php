@@ -19,11 +19,12 @@
 </header>
 <div class="menu" id = "menu1">
     <ul>
-        <li><a href="#">Gallery</a></li>
-        <li><a href="#">Atelier</a></li>
-        <li><a href="/socialnet/public/home">Home</a></li>
-        <li><a href="/socialnet/public/search">Buscar amigos</a></li>
-        <li><a href="/socialnet/public/myProfile">My Profile</a></li>
+        <li><a href="gallery">Gallery</a></li>
+        <li><a href="canva">Created</a></li>
+        <li><a href="{{asset('atelier')}}">Atelier</a></li>
+        <li><a href="{{asset('home')}}">Home</a></li>
+        <li><a href="{{asset('search')}}">Buscar amigos</a></li>
+        <li><a href="{{asset('myProfile')}}">My Profile</a></li>
     </ul>
 </div>
 <div class="menu" id = "menu2">
@@ -69,5 +70,6 @@
         });
     }) (jQuery);
 </script>
+<input type="hidden" id="idUser" value="{{$idUserSession}}"/>
 </body>
 </html>

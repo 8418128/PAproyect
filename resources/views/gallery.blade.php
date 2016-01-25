@@ -12,7 +12,7 @@
     <!-- hamburger menu: http://codepen.io/g13nn/pen/eHGEF -->
     <button class="hamburger">&#9776;</button>
     <button class="cross">&#735;</button>
-    My Atelier
+    My Gallery
     <button class="friends"><img src="style/group_contact-512.png"></button>
     <button class="cross2">&#735;</button>
 </header>
@@ -35,32 +35,17 @@
 </div>
 <div id="contenido">
     <div>
-        <label>Mis Canvas:</label><br>
-        @if (count($canvas)>0)
-            @foreach ($canvas as $p)
+        <label>Resultado de la búsqueda:</label><br>
+        @if (count($painting)>0)
+            @foreach ($painting as $p)
                 <figure>
-                    <a href="canvas/{{ $p->idCanvas}}"><img src="{{asset('preview/'.$p->preview)}}" /></a>
+                    <a href="canvas/{{ $p->idPainting}}"><img src="{{asset('preview/'.$p->image)}}" /></a>
                     <figcaption>{{$p->title}}.</figcaption>
                 </figure>
             @endforeach
         @else
 
-            <p>No tienes aún un painting.</p>
-        @endif
-    </div>
-    <!-- Los canvas invitados -->
-    <div>
-        <label>Canvas Invitados:</label><br>
-        @if (count($invited)>0)
-            @foreach ($invited as $p)
-                <figure>
-                    <a href="canvas/{{ $p->idCanvas}}"><img src="{{asset('preview/'.$p->preview)}}" /></a>
-                    <figcaption>{{$p->title}}.</figcaption>
-                </figure>
-            @endforeach
-        @else
-
-            <p>No tienes aún un painting.</p>
+            <p>No tienes aún painting.</p>
         @endif
     </div>
 </div>

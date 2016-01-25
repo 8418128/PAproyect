@@ -41,7 +41,8 @@ class UsersController extends Controller {
         return view('profile', ['name' => $user->name,
             'photo'=>$photo,
             'birthdate'=>$user->birthDate,
-            'email'=>$user->email]);
+            'email'=>$user->email,
+            'idUserSession'=>$user->idUser]);
 
     }
 
@@ -54,7 +55,8 @@ class UsersController extends Controller {
         return view('editProfile', ['name' => $user->name,
             'photo'=>$photo,
             'birthdate'=>$user->birthDate,
-            'email'=>$user->email]);
+            'email'=>$user->email,
+            'idUserSession'=>$user->idUser]);
 
     }
 
@@ -75,7 +77,8 @@ class UsersController extends Controller {
             'birthdate'=>$user->get(0)->birthDate,
             'email'=>$user->get(0)->email,
            'idUser'=>$user->get(0)->idUser,
-            'friend'=>$friend]);
+            'friend'=>$friend,
+           'idUserSession'=>$u->idUser]);
     }
 
 
@@ -121,6 +124,8 @@ class UsersController extends Controller {
         if(!is_null($photo)){
            $photo=$this->savePhoto($request);
             $new_user->photo=$photo;
+        }else{
+            $new_user='noimg.png';
         }
 
         $new_user->save();

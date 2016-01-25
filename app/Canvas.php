@@ -34,4 +34,5 @@ class Canvas extends Model
         return Canvas::where('user','=',$id)->get();
 
     }
+
 }

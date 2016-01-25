@@ -64,8 +64,6 @@ class User extends Model
 		return $this->hasMany('App\Like_painting');
 	}
 
-
-
 	/*public function imagesLike($c)
 	{
 		return $this->hasMany('App\Image')->where('comment','LIKE','%'.$c.'%')->get();

@@ -16,7 +16,7 @@
     </header>
     <div class="menu" id = "menu1">
         <ul>
-            <li><a href="#">Gallery</a></li>
+            <li><a href="gallery">Gallery</a></li>
             <li><a href="canva">Created</a></li>
             <li><a href="atelier">Atelier</a></li>
             <li><a href="home">Home</a></li>

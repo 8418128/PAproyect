@@ -12,5 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Guest extends Model
 {
-
+    static public function viewCanvasInvited($id){
+        return Guest::where('user', $id)->get();
+    }
 }
