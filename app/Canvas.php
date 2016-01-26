@@ -34,6 +34,11 @@ class Canvas extends Model
     }
     static public function viewCanvas($id){
         return Canvas::where('user','=',$id)->get();
+    }
+
+    static public function getCanvasId($ids){
+        return Canvas::whereIn('idCanvas',$ids)->get();
 
     }
+
 }

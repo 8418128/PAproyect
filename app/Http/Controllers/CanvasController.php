@@ -8,11 +8,17 @@
 
 namespace App\Http\Controllers;
 use App\Chat;
+use App\Comment;
+use App\Guest;
+use App\Painting;
+use App\User;
 use Carbon\Carbon;
 use File;
 use App\Canvas;
 use App\Guest;
 use Illuminate\Http\Request;
+use DB;
+use PDO;
 class CanvasController extends Controller implements Pusheable
 {
 
@@ -277,16 +283,96 @@ class CanvasController extends Controller implements Pusheable
         return true;
     }
 
-    function viewMyPreview(Request $request){//Obtengo los canvas del usuario
-        $idUser=$request->session()->get('user_obj')->idUser;
-        $canvas=Canvas::viewCanvas($idUser);
-        $c=[];
-        foreach($canvas as $canva){
-            $c[]=$canva;
+    function viewMyCanvas(Request $request)
+    {//Obtengo los canvas del usuario
+        $idUser = $request->session()->get('user_obj')->idUser;
+        $canvas = Canvas::viewCanvas($idUser);
+        $c = [];
+        foreach ($canvas as $canva) {
+            $c[] = $canva;//Cambas del usuario
         }
         return view('atelier', ['canvas' => $c]);
 
+        //Obtener los canvas invitados
+        $guests = Guest::viewCanvasInvited($idUser);//Obtengo los canvas que me han invitado
+        $cg = [];
+        foreach ($guests as $canva) {
+            $cg[] = $canva->canvas;
+        }
+        if (count($cg) > 0) {
+            $canvasGuests = Canvas::getCanvasId($cg);
+        } else {
+            $canvasGuests = [];
+        }
+
+        return view('atelier', ['canvas' => $c, 'idUserSession' => $idUser, 'invited' => $canvasGuests]);
+
     }
+
+
+    function viewMyPainting(Request $request)
+    {//Obtengo los canvas del usuario
+        $idUser = $request->session()->get('user_obj')->idUser;
+        $painting = Painting::viewMyPainting($idUser);
+        $c = [];
+        foreach ($painting as $paint) {
+            $c[] = $paint;
+
+
+            return view('gallery', ['painting' => $c, 'idUserSession' => $idUser]);
+        }
+    }
+
+
+        function paintingHome(Request $request)
+        {
+            $idUser = $request->session()->get('user_obj')->idUser;
+            DB::setFetchMode(PDO::FETCH_ASSOC);
+            $x = DB::table('friends')->select('friend')->where('user', $idUser)->get();//obtengo mis amigos
+            $fs = [];
+            foreach ($x as $n) {
+                $fs[] = $n['friend'];
+            }
+
+            //DB::enableQueryLog();
+            $autor = [];
+            $comments=[];
+            $painting = Painting::viewPaintingFriend($fs);
+            if (count($painting) > 0) {
+                foreach ($painting as $paint) {
+                   // var_dump($paint->comments());
+                   $name = User::getUserById($paint->publish);//Obtengos los nonbres de quien ha hecho el canvas
+                    $autor = [$paint->publish => $name->get(0)->name];
+                    $comment=Comment::viewCommentById($paint->idPainting);//Obtengo los comentarios del painting
+                   // var_dump($comment->publish());
+                   // $name = User::getUserById($comment->publish);//Obtengo el nombre de usuario quien lo escribe
+                  //  $comments = [];
+                }
+
+            }
+            // dd(DB::getQueryLog());
+           return view('home', ['painting' => $painting,'idUserSession'=>$idUser,'autor'=>$autor]);
+
+        }
+
+
+        function comment(Request $request)
+        {
+            $comentario = $request->input('comment');
+            $idCanva = $request->input('id');
+            $userId = $request->session()->get('user_obj')->idUser;
+            $new_comment = new Comment();
+            $new_comment->painting = $idCanva;
+            $new_comment->publish = $userId;
+            $new_comment->text = $comentario;
+            $new_comment->save();
+
+            $user=['name'=>$new_comment->publish()->name,'text'=>$new_comment->text];
+            return $user;
+
+
+        }
+
 
     function push(Request $request)
     {

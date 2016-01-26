@@ -17,4 +17,7 @@ class Guest extends Model
     public function getCanvas(){
         $this->hasOne(Canvas::class,'idCanvas','canvas');
     }
+    static public function viewCanvasInvited($id){
+        return Guest::where('user', $id)->get();
+    }
 }

@@ -18,8 +18,8 @@
     </header>
     <div class="menu" id = "menu1">
         <ul>
-            <li><a href="#">Gallery</a></li>
-            <li><a href="#">Atelier</a></li>
+            <li><a href="gallery">Gallery</a></li>
+            <li><a href="atelier">Atelier</a></li>
             <li><a href="home">Home</a></li>
             <li><a href="search">Buscar amigos</a></li>
             <li><a href="myProfile">My Profile</a></li>
@@ -80,7 +80,6 @@
             @endif
 
         </div>
-
     </div>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
@@ -93,5 +92,6 @@
             });
         }) (jQuery);
     </script>
+    <input type="hidden" id="idUser" value="{{$idUserSession}}"/>
     </body>
 </html>

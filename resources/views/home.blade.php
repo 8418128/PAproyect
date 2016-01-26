@@ -4,6 +4,10 @@
 
         <link href="{{asset('style/editProfile.css')}}" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="style\menu.css">
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="{{asset('generalJs/comment.js')}}"></script>
+        <script type="text/javascript" src="{{asset('generalJs/like_comment.js')}}"></script>
+
     </head>
     <body>
     <header>
@@ -16,7 +20,7 @@
     </header>
     <div class="menu" id = "menu1">
         <ul>
-            <li><a href="#">Gallery</a></li>
+            <li><a href="gallery">Gallery</a></li>
             <li><a href="canva">Created</a></li>
             <li><a href="atelier">Atelier</a></li>
             <li><a href="home">Home</a></li>
@@ -32,7 +36,26 @@
         </ul>
     </div>
         <div id="contenido">
-            <h2>Aqui Van los Paitings publicados de los amigos</h2>
+            <div>
+                <label>POST:</label><br>
+                @if (count($painting)>0)
+                    @foreach ($painting as $p)
+                        <figure>
+                            <a href="canvas/{{ $p->idPainting}}"><img src="{{asset('preview/'.$p->image)}}" /></a>
+                            <figcaption>{{$p->title}}.</figcaption>
+                        </figure>
+                        <div class="comentarios" id="comment".{{ $p->idPainting}}>
+                            @foreach($p->comments() as $co)
+                                {{$co->publish()->name}}: <p> {{$co->text}} </p><button name="like" value="{{$co->idComment}}" class="like">Me gusta</button><br>
+                            @endforeach
+                        </div>
+                    @endforeach
+                    <br>Yo: <input type="text" name="{{ $p->idPainting}}" class="comentario" placeholder="Escribe un comentario..." >
+                @else
+
+                    <p>No hay publicacioness.</p>
+                @endif
+            </div>
 
         </div>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -46,5 +69,6 @@
             });
         }) (jQuery);
     </script>
+    <input type="hidden" id="idUser" value="{{$idUserSession}}"/>
     </body>
 </html>

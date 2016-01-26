@@ -22,7 +22,7 @@ class FriendsController extends Controller {
       }
       $fr=$this->getSuggestedFriend($user->idUser);
       //var_dump($fr);
-     return view('search', ['peticiones' => $friend,'friend'=>$fr]);
+     return view('search', ['peticiones' => $friend,'friend'=>$fr, 'idUserSession'=>$user->idUser]);
   }
     public function getSuggestedFriend($userId){
         //$userId=$request->session()->get('user_obj')->idUser;
@@ -54,7 +54,7 @@ class FriendsController extends Controller {
                     }
                 }
 
-            }//FALTA QUITAR LOS AMIGOS EN COMUN
+            }
             //dd(DB::getQueryLog());
         }
         return $fr;
@@ -130,9 +130,9 @@ public function send($friendId, Request $request){
 //var_dump( User::findByUserName($name));
        //return response()->json(['users'=> User::findByUserName($name)]);
         $us=[];
+        $friendok=[];
         if($name!=''){
             $users=User::findByUserName($name);
-            $friendok=[];
             foreach($users as $u){
                if($u->idUser != $userId){
                    if(Friend::viewFriend($u->idUser,$userId)){
@@ -144,7 +144,7 @@ public function send($friendId, Request $request){
 
             }
         }
-       return view('lookForUsers', ['users' => $us,'friend'=>$friendok]);
+       return view('lookForUsers', ['users' => $us,'friend'=>$friendok,'idUserSession'=>$userId]);
 
 
     }
