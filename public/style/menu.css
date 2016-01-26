@@ -29,7 +29,7 @@ header{
 }
 .friends{
     background: none;
-        position:absolute;
+    position:absolute;
     top:0;
     right:0;
     line-height:45px;
@@ -86,6 +86,111 @@ header{
 .menu a{text-decoration:none; color:white;}
 .menu a:hover{text-decoration:none; color:white;}
 
+
+.menu ul {margin: 0; padding: 0; list-style-type: none; list-style-image: none;}
+#menu2{z-index:1000000; font-weight:bold; font-size:0.8em; right: 0px; width:20%; background:#131313; color:#fff; position:absolute; text-align:left; height: 400px; padding-left: 20px; overflow-y: scroll;}
+.menu li {display: block;   padding:15px 0 15px 0; border-bottom:#1d1f20 1px solid;}
+.menu li:hover{display: block;    background:#181818; padding:15px 0 15px 0; border-bottom:#1d1f20 1px solid;}
+.menu ul li a { text-decoration:none;  margin: 0px; color:#fff;}
+.menu ul li a:hover {  color: #fff; text-decoration:none;}
+.menu a{text-decoration:none; color:white;}
+.menu a:hover{text-decoration:none; color:white;}
+.glyphicon-home{
+    color:white;
+    font-size:1.5em;
+    margin-top:5px;
+    margin:0 auto;
+}
+#chats-container{
+    background-color: #131313;
+}
+/*body{
+    font-family: 'Noto Sans', sans-serif;
+    margin:0;
+    background-image: url('pattern8-pattern-20d.png');
+}
+header{
+    width:100%;
+    background:#1d1f20;
+    height:50px;
+    top: 0px;
+    text-align: center;
+    color: white;
+    line-height:50px;
+}
+.hamburger{
+    background:none;
+    position:absolute;
+//top:0;
+    left:0;
+    line-height:45px;
+    padding:0px 15px 0px 15px;
+    color:#fff;
+    border:0;
+    font-size:1.4em;
+    font-weight:bold;
+    cursor:pointer;
+    outline:none;
+    z-index:10000000000000;
+}
+.friends{
+    background: none;
+        position:absolute;
+    top:0;
+    right:0;
+    line-height:45px;
+    padding:0px 15px 0px 15px;
+    color:#fff;
+    border:0;
+    font-size:1.4em;
+    font-weight:bold;
+    cursor:pointer;
+    outline:none;
+    z-index:10000000000000;
+}
+.friends img{
+    margin-top: 5px;
+    width: 40px;
+    height: 40px;
+}
+.cross{
+    background:none;
+    position:absolute;
+    top:0px;
+    left:0;
+    padding:0px 15px 0px 15px;
+    color:#fff;
+    border:0;
+    font-size:3em;
+    line-height:65px;
+    font-weight:bold;
+    cursor:pointer;
+    outline:none;
+    z-index:10000000000000;
+}
+.cross2{
+    background:none;
+    position:absolute;
+    top:0px;
+    right:0;
+    padding:0px 15px 0px 15px;
+    color:#fff;
+    border:0;
+    font-size:3em;
+    line-height:65px;
+    font-weight:bold;
+    cursor:pointer;
+    outline:none;
+    z-index:10000000000000;
+}
+.menu{z-index:1000000; font-weight:bold; font-size:0.8em; width:20%; background:#131313; color:#fff; position:absolute; text-align:center;}
+.menu ul {margin: 0; padding: 0; list-style-type: none; list-style-image: none;}
+.menu li {display: block;   padding:15px 0 15px 0; border-bottom:#1d1f20 1px solid;}
+.menu li:hover{display: block;    background:#181818; padding:15px 0 15px 0; border-bottom:#1d1f20 1px solid;}
+.menu ul li a { text-decoration:none;  margin: 0px; color:#fff;}
+.menu ul li a:hover {  color: #fff; text-decoration:none;}
+.menu a{text-decoration:none; color:white;}
+.menu a:hover{text-decoration:none; color:white;}
 #menu2{z-index:1000000; font-weight:bold; font-size:0.8em; right: 0px; width:20%; background:#131313; color:#fff; position:absolute; text-align:center;}
 .menu ul {margin: 0; padding: 0; list-style-type: none; list-style-image: none;}
 .menu li {display: block;   padding:15px 0 15px 0; border-bottom:#1d1f20 1px solid;}
@@ -100,3 +205,4 @@ header{
     margin-top:5px;
     margin:0 auto;
 }
+*/
