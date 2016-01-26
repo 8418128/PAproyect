@@ -7,7 +7,7 @@ var ctx, color = "#000";
 var globalsrc = '/socialnet/public/canvasimg/'
 var tempImg,tmpO;
 var tmpW;
-var canvas_id=180;
+var canvas_id;
 var invert = false;
 var time = 10000
 var timer;
@@ -16,6 +16,7 @@ var offx = 0
 var moving = false;
 var imagesToRemove = []
 $(function(){
+    canvas_id = $("#id_c").val();
     document.oncontextmenu = function() {return false;};
     newCanvas();
     addListeners()
@@ -133,20 +134,20 @@ function tryPreview(){
     console.log("trying update preview")
     $.ajax({
         type: "GET",
-        url: "lastmod",
+        url: "try/lastmod",
         data: {
             canvas_id: canvas_id
         },
         success: function(data) {
-            console.log("SUCCESS: ----->"+data);
-
-
+            console.log("SUCCESS");
         },
         error: function(status) {
             console.log("ERROR: "+status);
         }
     }).done(function(data){
-
+        console.log("data");
+        console.log(data);
+        console.log("------------");
         if(data==1){
             console.log("UPDATING PREVIEW")
             var def = deleteMedias()

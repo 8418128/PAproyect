@@ -9,8 +9,19 @@ use File;
 use App\Friend;
 class UsersController extends Controller {
 
-  public function login(Request $request) { //VALIDAR EL LOGIN
+  public function logOutAjax(Request $request){
+      $id = $request->input("idUser");
+      $user = User::find($id);
+      $user->connected=0;
+      $user->save();
+  }
 
+  public function logOut(Request $request){
+      $request->session()->forget('user_obj');
+      return redirect('/');
+  }
+
+  public function login(Request $request) { //VALIDAR EL LOGIN
       $email = $request->input("email");
       $password = $request->input("password");
 

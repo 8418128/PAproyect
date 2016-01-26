@@ -12,5 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Guest extends Model
 {
+    protected $fillable = array('canvas', 'user');
 
+    public function getCanvas(){
+        $this->hasOne(Canvas::class,'idCanvas','canvas');
+    }
 }

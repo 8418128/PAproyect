@@ -2,11 +2,24 @@
  * Created by S on 17/01/2016.
  */
 var route = '/socialnet/public/generalImg/'
-var me = {idUser:9};
 var openedChats = {};
 var hes = {};
+var me;
 $(function(){
+    var me = $("#idUser").val()
+    $(window).on('beforeunload', function(){
+        $.ajax({
+            type: "POST",
+            url: "logOutAjax",
+            data: {
+                idUser:me
+            }
+        })
+    });
+
+    console.log(me)
     listenPusher(me)
+
     $(document).on('click', '.glyphicon-comment', function (e) {
         var chatid = $(this).attr('id')
         chatid = parseInt(chatid.split('chat')[1]);
@@ -199,7 +212,7 @@ function listenPusher(me){
         console.log(msg)
     };
     var pusher = new Pusher("650badadf8611ff0c889")
-    var channel = pusher.subscribe(me.idUser.toString());
+    var channel = pusher.subscribe(me.toString());
     channel.bind('App\\Events\\ChEvent',
         function(data) {
             console.log("-.-.-.-.-.")

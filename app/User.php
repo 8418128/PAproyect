@@ -58,7 +58,7 @@ class User extends Model
 		return $this->hasMany('App\Canvas');
 	}
 	public function friends(){
-		return $this->hasMany('App\Friend');
+		return Friend::where('user',$this->idUser)->get();
 	}
 	public function likesPaintings(){
 		return $this->hasMany('App\Like_painting');

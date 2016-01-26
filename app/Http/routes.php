@@ -16,11 +16,9 @@ Route::post('doLog', 'UsersController@login');
 Route::get('home',function(){return view('home');});
 Route::post('doReg', 'UsersController@register');
 Route::get('search', 'FriendsController@getPeticiones');
-Route::post('uploadCanvas', 'CanvasController@save');
-Route::post('resize', 'CanvasController@resizeImage');
-Route::get('/canvas', function () {
-    return view('canvas');
-});
+Route::post('/canvas/uploadCanvas', 'CanvasController@save');
+Route::post('/canvas/resize', 'CanvasController@resizeImage');
+Route::get('/canvas/{id}', 'CanvasController@getCanvasView');
 Route::get('/', function () {
     return view('login_snippet');
 });
@@ -46,12 +44,12 @@ Route::get('/broadcast/{channel}', function($channel) {
     return view('welcome')->with('channel',$channel);
 });
 
-Route::post('push', 'CanvasController@push');
+Route::post('/canvas/push', 'CanvasController@push');
 Route::post('pushChat', 'ChatController@push');
 
-Route::get('lastmod', 'CanvasController@lastmod');
-Route::post('uploadPreview', 'CanvasController@savePreview');
-Route::get('uploadPreview', 'CanvasController@savePreview');
+Route::get('/canvas/try/lastmod', 'CanvasController@lastmod');
+Route::post('/canvas/uploadPreview', 'CanvasController@savePreview');
+Route::get('/canvas/uploadPreview', 'CanvasController@savePreview');
 
 Route::get('atelier','CanvasController@viewMyPreview');
 
@@ -65,7 +63,15 @@ Route::get('/profile','UsersController@getProfile');
 Route::get('/edit','UsersController@getProfile');
 Route::post('/saveProfile','UsersController@update');
 
+Route::post('logOutAjax','UsersController@logOutAjax');
+
+
+
 Route::get('chats','ChatController@getChatFromFriend');
 Route::get('/chaty', function () {
     return view('chatView');
 });
+
+Route::get('/newcanvas','CanvasController@newCanvas');
+Route::post('createcanvas','CanvasController@createCanvas');
+

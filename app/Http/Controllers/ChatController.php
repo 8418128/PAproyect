@@ -16,6 +16,7 @@ class ChatController extends Controller implements Pusheable
         $friend = User::find($request->input('friend'));
         //$friend = User::find(10);
 
+
         $chats = Chat::chatFrom($user,$friend);
 
         $person = ['me' => User::find($user->idUser), 'he' => $friend];

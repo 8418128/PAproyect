@@ -7,15 +7,67 @@
  */
 
 namespace App\Http\Controllers;
+use App\Chat;
 use Carbon\Carbon;
 use File;
 use App\Canvas;
+use App\Guest;
 use Illuminate\Http\Request;
 class CanvasController extends Controller implements Pusheable
 {
 
-    function gallery(Request $request){
+    function getCanvasView($id,Request $request){
+        $user=$request->session()->get('user_obj')->idUser;
+        $c = Canvas::find($id);
+        $g = Guest::where('user',$user)->where('canvas',$id)->get();
+        if(empty($c))
+            return "no hay canvas";
+        else if(count($g)<1)
+            return "no estas invitado al canvas";
+        return view('canvas')->with('canvas',$id);
 
+
+    }
+
+    function newCanvas(Request $request){
+        $user=$request->session()->get('user_obj');
+        return view('newCanvas')->with('user',$user);
+    }
+
+    function createCanvas(Request $request){
+        $title = $request->input('title');
+        $editable = $request->input('editable');
+        $guests = $request->input('guests');
+        $user=$request->session()->get('user_obj');
+
+        $id = Canvas::create(array('user' => $user->idUser, 'title' => $title, 'editable' => $editable, 'preview' => 'noimg.png'))->idCanvas;
+
+        foreach($guests as $guest){
+            $g = new Guest();
+            $g->user=$guest;
+            $g->canvas=$id;
+            $g->save();
+            self::pushGuest($user->idUser,$guest,$id);
+
+        }
+        $g = new Guest();
+        $g->user=$user->idUser;
+        $g->canvas=$id;
+        $g->save();
+
+        return "/socialnet/public/canvas/".$id;
+
+    }
+
+    function pushGuest($creator,$user,$canvas){
+        $chat = ['text'=>'Te he invitado a mi <a href="/socialnet/public/canvas/'.$canvas.'">canvas</a>','sends'=>$creator];
+        //$json = json_encode($chat);
+        $c = new Chat();
+        $c->sends=$creator;
+        $c->receives=$user;
+        $c->text=$chat['text'];
+        $c->save();
+        event(new \App\Events\ChEvent($user,$chat));
     }
 
     /**
@@ -24,7 +76,7 @@ class CanvasController extends Controller implements Pusheable
     function lastmod(Request $request){
         $canvas_id = $request->input('canvas_id');
 
-        $canvas_update = Canvas::find(/*$canvas_id*/7)->updated_at;
+        $canvas_update = Canvas::find($canvas_id)->updated_at;
         $up = Carbon::createFromFormat('Y-m-d H:i:s', $canvas_update);
         $now = Carbon::now()->addMinutes(-5)->format('Y-m-d H:i:s');
 
@@ -64,12 +116,12 @@ class CanvasController extends Controller implements Pusheable
     function savePreview(Request $request){
         $canvas_id = $request->input('canvas_id');
         $img = self::save($request);
-        $canvas = Canvas::find(/*$canvas_id*/7);
+        $canvas = Canvas::find($canvas_id);
         $previuos_preview = $canvas->preview;
-        if($previuos_preview!="") {
-            $f = public_path("canvasimg") . "\\" . $previuos_preview;
+        $f = public_path("preview") . "\\" . $previuos_preview;
+        if($previuos_preview!='noimg.png')
             File::delete($f);
-        }
+
         $path = public_path("canvasimg") . "\\" . $img;
         list($width, $height) = getimagesize($path);
         $preview = "preview".$img;

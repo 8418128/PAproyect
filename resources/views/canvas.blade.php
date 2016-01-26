@@ -92,6 +92,7 @@
 <link rel="stylesheet" type="text/css" href="{{asset('free/css/jquery.freetrans.css')}}"/>
 @endsection
 @section('content')
+    <input type="hidden" id="id_c" value="{{$canvas}}"/>
     <div id="page">
         <div id='image' class="draggable-handler"></div>
     <div id="content"><p style="text-align:center">Loading Canvas...</p></div>

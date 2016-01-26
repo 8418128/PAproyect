@@ -17,7 +17,7 @@ class Friend extends Model
     }
 
     public function us(){
-        return $this->hasOne(User::class,'idUser','friend');
+        return User::find($this->friend);
     }
 
 
@@ -28,7 +28,7 @@ class Friend extends Model
     static public function getFriendsDelete($idUser,$idFriend){
         $friends=Friend::where('user','=',$idUser)->where('friend','=',$idFriend)->delete();
 
-}
+    }
     static public function getFriends($idUser,$idFriend){
         return Friend::where('user','=',$idUser)->where('friend','=',$idFriend)->get();
     }
