@@ -15,7 +15,6 @@ use App\User;
 use Carbon\Carbon;
 use File;
 use App\Canvas;
-use App\Guest;
 use Illuminate\Http\Request;
 use DB;
 use PDO;
