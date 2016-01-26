@@ -51,7 +51,7 @@
                 @endforeach
                 </div>
             @endforeach
-            <br>Yo: <input type="text" name="{{ $p->idPainting}}" id="comentario" placeholder="Escribe un comentario..." >
+            <br>Yo: <input type="text" name="{{ $p->idPainting}}" class="comentario" placeholder="Escribe un comentario..." >
         @else
 
             <p>No hay publicacioness.</p>

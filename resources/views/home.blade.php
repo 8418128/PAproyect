@@ -43,11 +43,13 @@
                             <a href="canvas/{{ $p->idPainting}}"><img src="{{asset('preview/'.$p->image)}}" /></a>
                             <figcaption>{{$p->title}}.</figcaption>
                         </figure>
-                        @foreach($p->comments() as $co)
-                            {{$co->publish()->name}}: <input type="text" value="{{$co->text}}" readonly ><br>
-                        @endforeach
+                        <div class="comentarios" id="comment".{{ $p->idPainting}}>
+                            @foreach($p->comments() as $co)
+                                {{$co->publish()->name}}: <p> {{$co->text}} </p> <br>
+                            @endforeach
+                        </div>
                     @endforeach
-                       <br>Yo: <input type="text" name="{{ $p->idPainting}}" id="comentario" placeholder="Escribe un comentario..." >
+                    <br>Yo: <input type="text" name="{{ $p->idPainting}}" class="comentario" placeholder="Escribe un comentario..." >
                 @else
 
                     <p>No hay publicacioness.</p>

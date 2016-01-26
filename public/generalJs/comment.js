@@ -1,8 +1,8 @@
 $(document).ready(function(){
-    $("#comentario").keyup(function(e){
+    $(".comentario").keyup(function(e){
         if(e.keyCode==13){
-            var comentario = $('#comentario').val();
-            var idCanva= $('#comentario').attr('name');
+            var comentario = $('.comentario').val();
+            var idCanva= $('.comentario').attr('name');
             //console.log($('#comentario').attr('name'));
 
             if (comentario != '') {
@@ -13,7 +13,7 @@ $(document).ready(function(){
                     success: function (data) {
                         console.log("ola mi amol "+ data['name']);
                         $(".comentarios").append(data['name']+"<p>"+data['text']+"</p>");
-                        $("#comentario").val('');
+                        $(".comentario").val('');
 
                     },
 
