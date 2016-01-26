@@ -4,6 +4,9 @@
 
         <link href="{{asset('style/editProfile.css')}}" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="style\menu.css">
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="{{asset('generalJs/comment.js')}}"></script>
+
     </head>
     <body>
     <header>
@@ -32,7 +35,24 @@
         </ul>
     </div>
         <div id="contenido">
-            <h2>Aqui Van los Paitings publicados de los amigos</h2>
+            <div>
+                <label>POST:</label><br>
+                @if (count($painting)>0)
+                    @foreach ($painting as $p)
+                        <figure>
+                            <a href="canvas/{{ $p->idPainting}}"><img src="{{asset('preview/'.$p->image)}}" /></a>
+                            <figcaption>{{$p->title}}.</figcaption>
+                        </figure>
+                        @foreach($p->comments() as $co)
+                            {{$co->publish()->name}}: <input type="text" value="{{$co->text}}" readonly ><br>
+                        @endforeach
+                    @endforeach
+                       <br>Yo: <input type="text" name="{{ $p->idPainting}}" id="comentario" placeholder="Escribe un comentario..." >
+                @else
+
+                    <p>No hay publicacioness.</p>
+                @endif
+            </div>
 
         </div>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -46,5 +66,6 @@
             });
         }) (jQuery);
     </script>
+    <input type="hidden" id="idUser" value="{{$idUserSession}}"/>
     </body>
 </html>

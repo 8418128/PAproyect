@@ -5,7 +5,19 @@ var route = '/socialnet/public/generalImg/'
 var me = {idUser:9};
 var openedChats = {};
 var hes = {};
+$(window).on('beforeunload', function(){
+    $.ajax({
+        type: "POST",
+        url: "disconnect",
+        data: {
+            idUser:9
+        }
+    })
+});
 $(function(){
+
+
+
     listenPusher(me)
     $(document).on('click', '.glyphicon-comment', function (e) {
         var chatid = $(this).attr('id')

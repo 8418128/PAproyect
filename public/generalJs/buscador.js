@@ -1,5 +1,4 @@
 function load() {
-
         var name = $('#name').val();
         if (name != '') {
             $.ajax({

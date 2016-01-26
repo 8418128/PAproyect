@@ -5,7 +5,9 @@
     <link href="{{asset('style/editProfile.css')}}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="style\menu.css">
     <script type="text/javascript" src="{{asset('generalJs/buscador.js')}}"></script>
-    <script src="http://js.pusher.com/3.0/pusher.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="{{asset('generalJs/comment.js')}}"></script>
+
 </head>
 <body>
 <header>
@@ -36,17 +38,25 @@
 <div id="contenido">
     <div>
         <label>Resultado de la búsqueda:</label><br>
+
         @if (count($painting)>0)
             @foreach ($painting as $p)
                 <figure>
                     <a href="canvas/{{ $p->idPainting}}"><img src="{{asset('preview/'.$p->image)}}" /></a>
                     <figcaption>{{$p->title}}.</figcaption>
                 </figure>
+                <div class="comentarios" id="comment".{{ $p->idPainting}}>
+                @foreach($p->comments() as $co)
+                    {{$co->publish()->name}}: <p> {{$co->text}} </p> <br>
+                @endforeach
+                </div>
             @endforeach
+            <br>Yo: <input type="text" name="{{ $p->idPainting}}" id="comentario" placeholder="Escribe un comentario..." >
         @else
 
-            <p>No tienes aún painting.</p>
+            <p>No hay publicacioness.</p>
         @endif
+
     </div>
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

@@ -13,7 +13,7 @@
 
 Route::get('/main', 'MainController@myprofile');
 Route::post('doLog', 'UsersController@login');
-Route::get('home',function(){return view('home');});
+Route::get('home','CanvasController@paintingHome');
 Route::post('doReg', 'UsersController@register');
 Route::get('search', 'FriendsController@getPeticiones');
 Route::post('uploadCanvas', 'CanvasController@save');
@@ -70,3 +70,4 @@ Route::get('chats','ChatController@getChatFromFriend');
 Route::get('/chaty', function () {
     return view('chatView');
 });
+Route::post('comment','CanvasController@comment');
