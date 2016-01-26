@@ -37,7 +37,7 @@
 <div class = "container">
 
 
-    <img src="generalImg/{{$photo}}" width="100px">
+    <img src="{{asset('generalImg').'/'.$photo}}" width="100px">
     <p>Name: {{$name}}</p>
     <p>Date of birth: {{$birthdate}}</p>
     <p>Email: {{$email}}</p>
@@ -70,6 +70,7 @@
         });
     }) (jQuery);
 </script>
+<div id = "chats-container"></div>
 <input type="hidden" id="idUser" value="{{$idUserSession}}"/>
 </body>
 </html>

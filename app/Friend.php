@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Friend extends Model
 {
+    protected $with = array('user');
     public function user(){
         return $this->belongsTo(User::class, 'friend');
     }

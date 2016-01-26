@@ -79,3 +79,5 @@ Route::post('createcanvas','CanvasController@createCanvas');
 
 Route::post('comment','CanvasController@comment');
 Route::post('likeComment','UsersController@likeComment');
+
+Route::post('getMyFriends','UsersController@getMyFriends');
