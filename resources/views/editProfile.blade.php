@@ -1,6 +1,15 @@
 <html>
 <head>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="{{asset('generalJs/menu.js')}}"></script>
+    <script src="http://js.pusher.com/3.0/pusher.min.js"></script>
+    <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet" type="text/css">
+    <script src="{{asset('bootstrap/js/bootstrap.js')}}"></script>
+    <script src="{{asset('generalJs/chatIndividual.js')}}"></script>
+    <link href="{{asset('style/chatIndividual.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{asset('style/editProfile.css')}}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="style/menu.css" rel="stylesheet" type="text/css">
     <script>
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -72,10 +81,7 @@
         }
 
     </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <link href="{{asset('style/editProfile.css')}}" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="style\menu.css">
 </head>
 <body>
 <header>
@@ -83,27 +89,25 @@
     <button class="hamburger">&#9776;</button>
     <button class="cross">&#735;</button>
     Edit Profile
-    <button class="friends"><img src="generalImg/{{$photo}}"></button>
+    <button class="friends"><img src="style/profile_icon_small.png"></button>
     <button class="cross2">&#735;</button>
 </header>
 <div class="menu" id = "menu1">
     <ul>
         <li><a href="gallery">Gallery</a></li>
-        <li><a href="canva">Created</a></li>
         <li><a href="atelier">Atelier</a></li>
-        <li><a href="home">Home</a></li>
-        <li><a href="search">Buscar amigos</a></li>
+        <li><a href="home">Museum</a></li>
         <li><a href="myProfile">My Profile</a></li>
+        <li><a href="search">My friends</a></li>
     </ul>
 </div>
 <div class="menu" id = "menu2">
-    <ul>
-        <a href="#"><li>Friend1</li></a>
-        <a href="#"><li>Friend2</li></a>
-        <a href="#"><li>Friend3</li></a>
+
+    <ul id ="friends_ul">>
+
     </ul>
 </div>
-<div class = "container">
+<div class = "containerz">
     @if (count($errors) > 0)
         <div>
             <ul>
@@ -138,28 +142,6 @@
 
         <button id = "enviar" class="btn btn-info btn-block register" type="submit" name = "enviar">Keep changes</button>
     </form>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-
-    <!-- Slidebars -->
-    <script src="generalJs\menu.js"></script>
-    <script>
-        (function($) {
-            $(document).ready(function() {
-                $.slidebars();
-            });
-        }) (jQuery);
-    </script>
-</div>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-
-<!-- Slidebars -->
-<script src="generalJs\menu.js"></script>
-<script>
-    (function($) {
-        $(document).ready(function() {
-            $.slidebars();
-        });
-    }) (jQuery);
-</script>
+    </div>
 </body>
 </html>

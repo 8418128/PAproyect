@@ -12,12 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Friend extends Model
 {
+    protected $with = array('user');
     public function user(){
         return $this->belongsTo(User::class, 'friend');
     }
 
     public function us(){
-        return $this->hasOne(User::class,'idUser','friend');
+        return User::find($this->friend);
     }
 
 
@@ -38,6 +39,8 @@ class Friend extends Model
         Friend::where('user','=',$friend->user)->where('friend','=',$friend->friend)->update(['status'=>1]);
 
     }
+
+
 
    static public function viewFriend($idFriend,$idUser){
         $friend=Friend::where('user','=',$idUser)->where('friend','=',$idFriend)->first();

@@ -5,8 +5,19 @@
     <title>Profile view</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <link href="{{asset('style/profile.css')}}" rel="stylesheet" type="text/css">
-       <link rel="stylesheet" href="style\menu.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="generalJs/menu.js"></script>
+    <script src="http://js.pusher.com/3.0/pusher.min.js"></script>
+    <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet" type="text/css">
+
+    <script src="{{asset('bootstrap/js/bootstrap.js')}}"></script>
+    <script src="{{asset('generalJs/chatIndividual.js')}}"></script>
+    <link href="{{asset('style/chatIndividual.css')}}" rel="stylesheet" type="text/css">
+
+
+    <link href="style/profile.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="style/menu.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <header>
@@ -14,27 +25,27 @@
     <button class="hamburger">&#9776;</button>
     <button class="cross">&#735;</button>
     My Profile
-    <button class="friends"><img src="generalImg/{{$photo}}"></button>
-    <button class="cross2">&#735;</button>
+    <button class="friends"><img src="style/profile_icon_small.png"></button>
+    <button class="cross2" visibility="hidden" >&#735;</button>
 </header>
+
 <div class="menu" id = "menu1">
     <ul>
         <li><a href="gallery">Gallery</a></li>
         <li><a href="atelier">Atelier</a></li>
-        <li><a href="home">Home</a></li>
-        <li><a href="search">Buscar amigos</a></li>
+        <li><a href="home">Museum</a></li>
         <li><a href="myProfile">My Profile</a></li>
+        <li><a href="search">My friends</a></li>
     </ul>
 </div>
 <div class="menu" id = "menu2">
 
-    <ul>
-        <a href="#"><li>Friend1</li></a>
-        <a href="#"><li>Friend2</li></a>
-        <a href="#"><li>Friend3</li></a>
+    <ul id ="friends_ul">>
+
     </ul>
 </div>
-<div class = "container">
+
+<div class = "containerz">
 
         <img src="generalImg/{{$photo}}" width="100px">
        <p>Name: {{$name}}</p>
@@ -43,17 +54,20 @@
 
     <a href="editProfile"><button>Edit profile</button></a>
 </div>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
-<!-- Slidebars -->
-<script src="generalJs\menu.js"></script>
+
+
+
+<!--
 <script>
     (function($) {
         $(document).ready(function() {
             $.slidebars();
         });
     }) (jQuery);
-</script>
+</script> Slidebars -->
+<div id = "chats-container"></div>
+
 <input type="hidden" id="idUser" value="{{$idUserSession}}"/>
 </body>
 </html>

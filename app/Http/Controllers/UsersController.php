@@ -33,14 +33,17 @@ class UsersController extends Controller {
       }
 
     }
+    public function getMyFriends(Request $request){
+        $user=$request->session()->get('user_obj');
+        $friends = $user->friends()->toArray();
+        return $friends;//response()->json(['friends' => $friends]);
+
+    }
 
     public function getMyProfile(Request $request){
         $user=$request->session()->get('user_obj');
        $photo=$user->photo;
-        if($photo=="") {
-            $photo = "noimg.png";
-        }
-        return view('profile', ['name' => $user->name,
+              return view('profile', ['name' => $user->name,
             'photo'=>$photo,
             'birthdate'=>$user->birthDate,
             'email'=>$user->email,
@@ -51,9 +54,6 @@ class UsersController extends Controller {
     public function getProfile2(Request $request){//Para editar el perfil
         $user=$request->session()->get('user_obj');
         $photo=$user->photo;
-        if($photo==""){
-            $photo="noimg.png";
-        }
         return view('editProfile', ['name' => $user->name,
             'photo'=>$photo,
             'birthdate'=>$user->birthDate,

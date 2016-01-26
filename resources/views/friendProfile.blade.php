@@ -37,7 +37,7 @@
 <div class = "container">
 
 
-    <img src="generalImg/{{$photo}}" width="100px">
+    <img src="{{asset('generalImg').'/'.$photo}}" width="100px">
     <p>Name: {{$name}}</p>
     <p>Date of birth: {{$birthdate}}</p>
     <p>Email: {{$email}}</p>
