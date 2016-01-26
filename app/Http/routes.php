@@ -71,3 +71,4 @@ Route::get('/chaty', function () {
     return view('chatView');
 });
 Route::post('comment','CanvasController@comment');
+Route::post('likeComment','UsersController@likeComment');

@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="style\menu.css">
         <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" src="{{asset('generalJs/comment.js')}}"></script>
+        <script type="text/javascript" src="{{asset('generalJs/like_comment.js')}}"></script>
 
     </head>
     <body>
@@ -45,7 +46,7 @@
                         </figure>
                         <div class="comentarios" id="comment".{{ $p->idPainting}}>
                             @foreach($p->comments() as $co)
-                                {{$co->publish()->name}}: <p> {{$co->text}} </p> <br>
+                                {{$co->publish()->name}}: <p> {{$co->text}} </p><button name="like" value="{{$co->idComment}}" class="like">Me gusta</button><br>
                             @endforeach
                         </div>
                     @endforeach

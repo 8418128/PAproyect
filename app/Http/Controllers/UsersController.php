@@ -206,5 +206,11 @@ class UsersController extends Controller {
         return redirect('myProfile');
 
     }
+
+    public function likeComment(Request $request){
+        $userId = $request->session()->get('user_obj')->idUser;
+        $idCo = $request->input('idComment');
+
+    }
       
 }
