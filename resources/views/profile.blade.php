@@ -55,17 +55,6 @@
     <a href="editProfile"><button>Edit profile</button></a>
 </div>
 
-
-
-
-<!--
-<script>
-    (function($) {
-        $(document).ready(function() {
-            $.slidebars();
-        });
-    }) (jQuery);
-</script> Slidebars -->
 <div id = "chats-container"></div>
 
 <input type="hidden" id="idUser" value="{{$idUserSession}}"/>
