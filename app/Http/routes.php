@@ -13,7 +13,7 @@
 
 Route::get('/main', 'MainController@myprofile');
 Route::post('doLog', 'UsersController@login');
-Route::get('home',function(){return view('home');});
+Route::get('home','CanvasController@paintingHome');
 Route::post('doReg', 'UsersController@register');
 Route::get('search', 'FriendsController@getPeticiones');
 Route::post('/canvas/uploadCanvas', 'CanvasController@save');
@@ -51,7 +51,8 @@ Route::get('/canvas/try/lastmod', 'CanvasController@lastmod');
 Route::post('/canvas/uploadPreview', 'CanvasController@savePreview');
 Route::get('/canvas/uploadPreview', 'CanvasController@savePreview');
 
-Route::get('atelier','CanvasController@viewMyPreview');
+Route::get('atelier','CanvasController@viewMyCanvas');
+Route::get('gallery','CanvasController@viewMyPainting');
 
 
 Route::get('register', function () {
@@ -75,3 +76,12 @@ Route::get('/chaty', function () {
 Route::get('/newcanvas','CanvasController@newCanvas');
 Route::post('createcanvas','CanvasController@createCanvas');
 
+
+Route::get('/newcanvas','CanvasController@newCanvas');
+Route::post('createcanvas','CanvasController@createCanvas');
+
+
+Route::post('comment','CanvasController@comment');
+Route::post('likeComment','UsersController@likeComment');
+
+Route::post('getMyFriends','UsersController@getMyFriends');
