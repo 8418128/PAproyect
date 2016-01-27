@@ -24,15 +24,15 @@ class VerifyLogIn {
         /**
          *DECIDIR A DONDE REDIRIGIR TODAS LAS PETICIONES
          */
-        /*if($request->path()=='register'||$request->path()=='doReg'||$request->path()=='doLog'||$request->path()=='/') {
+        if($request->path()=='register'||$request->path()=='doReg'||$request->path()=='doLog'||$request->path()=='/') {
             return $next($request);
         }
         else if($request->session()->get('user_obj')==null){
             return redirect('/')->withCookie(cookie('prev_path', $request->path(), 5));
         }
-        else{*/
+        else{
             return $next($request);
-        //}
+        }
     }
 
 }

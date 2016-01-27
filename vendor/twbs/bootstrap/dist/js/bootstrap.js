@@ -743,7 +743,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: dropdown.js v3.3.6
+ * Bootstrap: drop.js v3.3.6
  * http://getbootstrap.com/javascript/#dropdowns
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -757,8 +757,8 @@ if (typeof jQuery === 'undefined') {
   // DROPDOWN CLASS DEFINITION
   // =========================
 
-  var backdrop = '.dropdown-backdrop'
-  var toggle   = '[data-toggle="dropdown"]'
+  var backdrop = '.drop-backdrop'
+  var toggle   = '[data-toggle="drop"]'
   var Dropdown = function (element) {
     $(element).on('click.bs.dropdown', this.toggle)
   }
@@ -854,7 +854,7 @@ if (typeof jQuery === 'undefined') {
     }
 
     var desc = ' li:not(.disabled):visible a'
-    var $items = $parent.find('.dropdown-menu' + desc)
+    var $items = $parent.find('.drop-menu' + desc)
 
     if (!$items.length) return
 
@@ -901,10 +901,10 @@ if (typeof jQuery === 'undefined') {
 
   $(document)
     .on('click.bs.dropdown.data-api', clearMenus)
-    .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+    .on('click.bs.dropdown.data-api', '.drop form', function (e) { e.stopPropagation() })
     .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
     .on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown)
-    .on('keydown.bs.dropdown.data-api', '.dropdown-menu', Dropdown.prototype.keydown)
+    .on('keydown.bs.dropdown.data-api', '.drop-menu', Dropdown.prototype.keydown)
 
 }(jQuery);
 
@@ -1986,7 +1986,7 @@ if (typeof jQuery === 'undefined') {
       .parents('li')
       .addClass('active')
 
-    if (active.parent('.dropdown-menu').length) {
+    if (active.parent('.drop-menu').length) {
       active = active
         .closest('li.dropdown')
         .addClass('active')
@@ -2070,7 +2070,7 @@ if (typeof jQuery === 'undefined') {
 
   Tab.prototype.show = function () {
     var $this    = this.element
-    var $ul      = $this.closest('ul:not(.dropdown-menu)')
+    var $ul      = $this.closest('ul:not(.drop-menu)')
     var selector = $this.data('target')
 
     if (!selector) {
@@ -2117,7 +2117,7 @@ if (typeof jQuery === 'undefined') {
     function next() {
       $active
         .removeClass('active')
-        .find('> .dropdown-menu > .active')
+        .find('> .drop-menu > .active')
           .removeClass('active')
         .end()
         .find('[data-toggle="tab"]')
@@ -2135,7 +2135,7 @@ if (typeof jQuery === 'undefined') {
         element.removeClass('fade')
       }
 
-      if (element.parent('.dropdown-menu').length) {
+      if (element.parent('.drop-menu').length) {
         element
           .closest('li.dropdown')
             .addClass('active')

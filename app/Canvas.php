@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Canvas extends Model
 {
     protected $table = 'canvas';
+    protected $primaryKey = 'idCanvas';
+    protected $fillable = array('editable', 'title', 'user');
 
     /*public function origen()
     {

@@ -6,7 +6,7 @@
 <script src="{{asset('generalJs/chatIndividual.js')}}"></script>
 <link href="{{asset('style/chatIndividual.css')}}" rel="stylesheet" type="text/css">
 <body>
-<span class="glyphicon glyphicon-comment" id="chat10"></span>
+<span class="glyphicon glyphicon-comment" id="chat9"></span>
 <span class="glyphicon glyphicon-comment" id="chat11"></span>
 <div id="chats-container"></div>
 </body>
