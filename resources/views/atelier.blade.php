@@ -51,16 +51,18 @@
     <!-- Los canvas invitados -->
     <div>
         <label>Canvas Invitados:</label><br>
-        @if (count($invited)>0)
-            @foreach ($invited as $p)
-                <figure>
-                    <a href="canvas/{{ $p->idCanvas}}"><img src="{{asset('preview/'.$p->preview)}}" /></a>
-                    <figcaption>{{$p->title}}.</figcaption>
-                </figure>
-            @endforeach
-        @else
+        @if (isset($invited))
+            @if (count($invited)>0)
+                @foreach ($invited as $p)
+                    <figure>
+                        <a href="canvas/{{ $p->idCanvas}}"><img src="{{asset('preview/'.$p->preview)}}" /></a>
+                        <figcaption>{{$p->title}}.</figcaption>
+                    </figure>
+                @endforeach
+            @else
 
-            <p>No tienes aún un painting.</p>
+                <p>No tienes aún un painting.</p>
+            @endif
         @endif
     </div>
 </div>

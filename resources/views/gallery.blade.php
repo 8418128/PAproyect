@@ -11,7 +11,7 @@
 </head>
 <body>
 <header>
-    <!-- hamburger menu: http://codepen.io/g13nn/pen/eHGEF -->
+    <!-- hamburger menu: http://codepen.io/g13nn/pen/eHGEF  -->
     <button class="hamburger">&#9776;</button>
     <button class="cross">&#735;</button>
     My Gallery

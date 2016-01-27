@@ -40,13 +40,15 @@ class FriendsController extends Controller {
             $cont = 0;
             $fr = [];
             foreach ($friends as $f) {
-                if ($f->us->idUser != $userId) {
-                    if (!in_array($f->us->idUser, $fs)) {
+                //var_dump($f->idUser);
+
+                if ($f->us()->idUser != $userId) {
+                    if (!in_array($f->us()->idUser, $fs)) {
                         if ($cont == 0) {
-                            $fr[] = $f->us;
+                            $fr[] = $f->us();
                         } else {
-                            if (!in_array($f->us->idUser, $fr)) {
-                                $fr[] = $f->us;
+                            if (!in_array($f->us()->idUser, $fr)) {
+                                $fr[] = $f->us();
                                 $cont++;
                             }
                         }
