@@ -50,6 +50,8 @@ Route::post('pushChat', 'ChatController@push');
 Route::get('/canvas/try/lastmod', 'CanvasController@lastmod');
 Route::post('/canvas/uploadPreview', 'CanvasController@savePreview');
 Route::get('/canvas/uploadPreview', 'CanvasController@savePreview');
+Route::post('createPreview', 'CanvasController@savePreview');
+Route::post('publish','CanvasController@publish');
 
 Route::get('atelier','CanvasController@viewMyCanvas');
 Route::get('gallery','CanvasController@viewMyPainting');
@@ -77,11 +79,10 @@ Route::get('/newcanvas','CanvasController@newCanvas');
 Route::post('createcanvas','CanvasController@createCanvas');
 
 
-Route::get('/newcanvas','CanvasController@newCanvas');
-Route::post('createcanvas','CanvasController@createCanvas');
-
-
 Route::post('comment','CanvasController@comment');
 Route::post('likeComment','UsersController@likeComment');
 
 Route::post('getMyFriends','UsersController@getMyFriends');
+
+Route::post('likeCanva','CanvasController@likeCanva');
+Route::post('dislikeCanva','CanvasController@dislikeCanva');

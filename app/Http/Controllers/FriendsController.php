@@ -133,12 +133,17 @@ public function send($friendId, Request $request){
        //return response()->json(['users'=> User::findByUserName($name)]);
         $us=[];
         $friendok=[];
+        $friendStatus=[];
+        $i=0;
         if($name!=''){
             $users=User::findByUserName($name);
             foreach($users as $u){
                if($u->idUser != $userId){
-                   if(Friend::viewFriend($u->idUser,$userId)){
+                  $f=Friend::viewFriend($u->idUser,$userId);
+                   if(count($f)>0){
                         $friendok[]=$u->idUser;
+                        $friendStatus[$i]=$f->status;
+                        $i++;
                    }
                    $us[]=$u;
                }
@@ -146,7 +151,8 @@ public function send($friendId, Request $request){
 
             }
         }
-       return view('lookForUsers', ['users' => $us,'friend'=>$friendok,'idUserSession'=>$userId]);
+       // var_dump($friend_obj);
+       return view('lookForUsers', ['users' => $us,'friend'=>$friendok,'idUserSession'=>$userId,'friendO'=>$friendStatus]);
 
 
     }

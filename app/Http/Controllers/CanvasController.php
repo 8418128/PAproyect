@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 use App\Chat;
 use App\Comment;
 use App\Guest;
+use App\Like_painting;
 use App\Painting;
 use App\User;
 use Carbon\Carbon;
@@ -25,10 +26,11 @@ class CanvasController extends Controller implements Pusheable
     {
         $user = $request->session()->get('user_obj')->idUser;
         $c = Canvas::find($id);
+        if(!empty($c)){
+            return view('canvas')->with('canvas', $id);
+        }
         $g = Guest::where('user', $user)->where('canvas', $id)->get();
-        if (empty($c))
-            return "no hay canvas";
-        else if (count($g) < 1)
+       if (count($g) < 1)
             return "no estas invitado al canvas";
         return view('canvas')->with('canvas', $id);
 
@@ -50,6 +52,11 @@ class CanvasController extends Controller implements Pusheable
 
         $id = Canvas::create(array('user' => $user->idUser, 'title' => $title, 'editable' => $editable, 'preview' => 'noimg.png'))->idCanvas;
 
+      /*  $gu = new Guest();
+        $gu->user = $user->idUser;
+        $gu->canvas = $id;
+        $gu->save();*/
+
         foreach ($guests as $guest) {
             $g = new Guest();
             $g->user = $guest;
@@ -58,10 +65,6 @@ class CanvasController extends Controller implements Pusheable
             self::pushGuest($user->idUser, $guest, $id);
 
         }
-        $g = new Guest();
-        $g->user = $user->idUser;
-        $g->canvas = $id;
-        $g->save();
 
         return "/socialnet/public/canvas/" . $id;
 
@@ -324,13 +327,15 @@ class CanvasController extends Controller implements Pusheable
     function viewMyPainting(Request $request)
     {//Obtengo los canvas del usuario
         $idUser = $request->session()->get('user_obj')->idUser;
-        $painting = Painting::viewMyPainting($idUser);
+       // DB::enableQueryLog();
+        $painting = Painting::viewPainting($idUser);
+       // dd(DB::getQueryLog());
         $c = [];
         foreach ($painting as $paint) {
             $c[] = $paint;
 
 
-            return view('gallery', ['painting' => $c, 'idUserSession' => $idUser]);
+        return view('gallery', ['painting' => $c, 'idUserSession' => $idUser]);
         }
     }
 
@@ -390,6 +395,43 @@ class CanvasController extends Controller implements Pusheable
         $json = $request->input('doc');
         event(new \App\Events\ChEvent($json['canvas_id'], $json));
         return "OKK-->";
+    }
+
+    function publish(Request $request){
+        $idCanvas = $request->input('canvas_id');
+
+        $canvas = Canvas::find($idCanvas);
+        $new_painting=new Painting();
+        $new_painting->publish=$canvas->user;
+        $new_painting->title=$canvas->title;
+        $new_painting->image=$canvas->preview;
+
+        $new_painting->save();
+
+
+    }
+
+    function likeCanva(Request $request){
+        $idCanva = $request->input('idCanva');
+        $idUser = $request->session()->get('user_obj')->idUser;
+        $new_like=new Like_painting();
+        $new_like->user=$idUser;
+        $new_like->painting=$idCanva;
+
+        $new_like->save();
+
+        return $idCanva;
+
+    }
+
+    function dislikeCanva(Request $request){
+        $idCanva = $request->input('idCanva');
+        $idUser = $request->session()->get('user_obj')->idUser;
+        Painting::deleteLikePainting($idCanva,$idUser);
+
+        return $idCanva;
+
+
     }
 
 

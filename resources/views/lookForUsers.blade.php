@@ -21,11 +21,12 @@
 </header>
 <div class="menu" id = "menu1">
     <ul>
-        <li><a href="gallery">Gallery</a></li>
-        <li><a href="atelier">Atelier</a></li>
-        <li><a href="home">Museum</a></li>
-        <li><a href="myProfile">My Profile</a></li>
-        <li><a href="search">My friends</a></li>
+        <li><a href="{{asset('gallery')}}">Gallery</a></li>
+        <li><a href="{{asset('newcanvas')}}">Created</a></li>
+        <li><a href="{{asset('atelier')}}">Atelier</a></li>
+        <li><a href="{{asset('home')}}">Museum</a></li>
+        <li><a href="{{asset('myProfile')}}">My Profile</a></li>
+        <li><a href="{{asset('search')}}">My friends</a></li>
     </ul>
 </div>
 <div class="menu" id = "menu2">
@@ -51,16 +52,20 @@
     <div >
         <label>Resultado de la búsqueda:</label><br>
         @if (count($users)>0)
+
+        <?php $i=0; ?>
             @foreach ($users as $p)
                 <p><a href="friendProfile/{{ $p->idUser}}">{{ $p->name }}</a></p>
                 @if (!in_array($p->idUser,$friend))
                     <div>
                         <a href="sendFriend3/{{ $p->idUser}}"><button>Enviar peticion de amistad</button></a>
                     </div>
-                @else
+                @elseif ($friendO[$i] == 1)
                     <span> Ya soys amigos</span>
+                @elseif($friendO[$i] == 0)
+                    <span>Petición enviada</span>
                 @endif
-
+                <?php $i++; ?>
             @endforeach
         @else
 

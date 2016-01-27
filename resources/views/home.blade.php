@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style\menu.css">
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="{{asset('generalJs/comment.js')}}"></script>
-    <script type="text/javascript" src="{{asset('generalJs/like_comment.js')}}"></script>
+    <script type="text/javascript" src="{{asset('generalJs/like_canva.js')}}"></script>
 
 </head>
 <body>
@@ -21,11 +21,11 @@
 <div class="menu" id = "menu1">
     <ul>
         <li><a href="gallery">Gallery</a></li>
-        <li><a href="canva">Created</a></li>
-        <li><a href="atelier">Atelier</a></li>
-        <li><a href="home">Home</a></li>
-        <li><a href="search">Buscar amigos</a></li>
-        <li><a href="myProfile">My Profile</a></li>
+        <li><a href="{{asset('newcanvas')}}">Created</a></li>
+        <li><a href="{{asset('atelier')}}">Atelier</a></li>
+        <li><a href="{{asset('home')}}">Museum</a></li>
+        <li><a href="{{asset('myProfile')}}">My Profile</a></li>
+        <li><a href="{{asset('search')}}">My friends</a></li>
     </ul>
 </div>
 <div class="menu" id = "menu2">
@@ -44,9 +44,12 @@
                     <a href="canvas/{{ $p->idPainting}}"><img src="{{asset('preview/'.$p->image)}}" /></a>
                     <figcaption>{{$p->title}}.</figcaption>
                 </figure>
+                <button name="like" value="{{$p->idPainting}}" class="like">Me gusta</button>
+
                 <div class="comentarios" id="comment".{{ $p->idPainting}}>
+
                     @foreach($p->comments() as $co)
-                        {{$co->publish()->name}}: <p> {{$co->text}} </p><button name="like" value="{{$co->idComment}}" class="like">Me gusta</button><br>
+                        {{$co->publish()->name}}: <p> {{$co->text}} </p>
                     @endforeach
                 </div>
             @endforeach

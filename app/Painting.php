@@ -12,11 +12,16 @@ class Painting extends Model
         return Comment::where('painting',$this->idPainting)->get();
    }
 
+    static public function deleteLikePainting($idP,$idU){
+        $friends=Like_painting::where('user','=',$idU)->where('painting','=',$idP)->delete();
+
+    }
+
     public function likesPaintings(){
         return $this->hasMany('App\Likes_painting');
     }
 
-    static public function viewMyPainting($idUser){
+    static public function viewPainting($idUser){
         return Painting::where('publish','=',$idUser)->get();
 
     }

@@ -42,10 +42,8 @@ class Friend extends Model
 
    static public function viewFriend($idFriend,$idUser){
         $friend=Friend::where('user','=',$idUser)->where('friend','=',$idFriend)->first();
-        if(count($friend)>0){
-            return true;
-        }
-        return false;
+
+        return $friend;
 
     }
 
